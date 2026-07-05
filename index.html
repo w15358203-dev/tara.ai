@@ -323,14 +323,6 @@ canvas{display:none}
         <canvas id="vc"></canvas>
         <br>
         <div class="row2">
-          <div class="f"><label>Scenes to generate</label>
-            <div class="chips" id="v-sc"><div class="chip" data-v="2">2</div><div class="chip on" data-v="3">3</div><div class="chip" data-v="4">4</div><div class="chip" data-v="5">5</div></div>
-          </div>
-          <div class="f"><label>Target platform</label>
-            <div class="chips" id="v-pl"><div class="chip on" data-v="Veo 3">Veo 3</div><div class="chip" data-v="Sora">Sora</div><div class="chip" data-v="Runway">Runway</div><div class="chip" data-v="Kling">Kling</div><div class="chip" data-v="Pika">Pika</div></div>
-          </div>
-        </div>
-        <div class="row2">
           <div class="f"><label>Visual style</label>
             <select id="v-sty"><option>Cinematic</option><option>Photorealistic</option><option>Anime</option><option>Documentary</option><option>Vintage film</option><option>Surreal</option><option>3D render</option></select>
           </div>
@@ -371,9 +363,6 @@ canvas{display:none}
         </div>
         <br>
         <div class="row2">
-          <div class="f"><label>Target platform</label>
-            <div class="chips" id="i-pl"><div class="chip on" data-v="Veo 3">Veo 3</div><div class="chip" data-v="Sora">Sora</div><div class="chip" data-v="Runway">Runway</div><div class="chip" data-v="Kling">Kling</div><div class="chip" data-v="Pika">Pika</div></div>
-          </div>
           <div class="f"><label>Output type</label>
             <div class="chips" id="i-ot"><div class="chip on" data-v="video prompt">Video Prompt</div><div class="chip" data-v="image prompt">Image Prompt</div><div class="chip" data-v="both">Both</div></div>
           </div>
@@ -406,14 +395,6 @@ canvas{display:none}
       <div class="card-bd">
         <div class="f"><label>Describe your video</label>
           <textarea id="t-desc" rows="4" placeholder="e.g. A travel vlog of Tokyo at night — starting from Shibuya crossing, then ramen stalls, then a quiet shrine, ending with a rooftop city view at golden hour…"></textarea>
-        </div>
-        <div class="row2">
-          <div class="f"><label>Number of scenes</label>
-            <div class="chips" id="t-sc"><div class="chip" data-v="2">2</div><div class="chip on" data-v="3">3</div><div class="chip" data-v="4">4</div><div class="chip" data-v="5">5</div></div>
-          </div>
-          <div class="f"><label>Platform</label>
-            <div class="chips" id="t-pl"><div class="chip on" data-v="Veo 3">Veo 3</div><div class="chip" data-v="Sora">Sora</div><div class="chip" data-v="Runway">Runway</div><div class="chip" data-v="Kling">Kling</div><div class="chip" data-v="Pika">Pika</div></div>
-          </div>
         </div>
         <div class="row2">
           <div class="f"><label>Style</label><select id="t-sty"><option>Cinematic</option><option>Photorealistic</option><option>Anime</option><option>Documentary</option><option>Vintage film</option><option>Surreal</option></select></div>
@@ -488,15 +469,7 @@ canvas{display:none}
         <div class="f"><label>Project description</label>
           <textarea id="sb-desc" rows="4" placeholder="e.g. A 60-second ad for a luxury watch brand. Opens on a mountain summit at dawn, a man checks his watch, looks at the horizon, then cuts to close-ups of the watch mechanism, ending with a brand reveal on white background…"></textarea>
         </div>
-        <div class="row2">
-          <div class="f"><label>Number of shots</label>
-            <div class="chips" id="sb-sc"><div class="chip" data-v="4">4</div><div class="chip on" data-v="6">6</div><div class="chip" data-v="8">8</div><div class="chip" data-v="10">10</div></div>
-          </div>
-          <div class="f"><label>Style</label><select id="sb-sty"><option>Cinematic live action</option><option>Animated</option><option>Anime</option><option>Documentary</option><option>Commercial</option><option>Music video</option></select></div>
-        </div>
-        <div class="f"><label>Target platform</label>
-          <div class="chips" id="sb-pl"><div class="chip on" data-v="Veo 3">Veo 3</div><div class="chip" data-v="Sora">Sora</div><div class="chip" data-v="Runway">Runway</div><div class="chip" data-v="Kling">Kling</div></div>
-        </div>
+        <div class="f"><label>Style</label><select id="sb-sty"><option>Cinematic live action</option><option>Animated</option><option>Anime</option><option>Documentary</option><option>Commercial</option><option>Music video</option></select></div>
         <button class="gen-btn" onclick="generateStoryboard()">🎞️ Generate storyboard</button>
         <div class="load-row" id="sb-load"><div class="spin"></div><span class="load-txt">Building your storyboard…</span></div>
         <div class="out-wrap" id="sb-out">
@@ -515,7 +488,7 @@ canvas{display:none}
 <div id="features" class="feat-section">
   <div class="sec-label">Why Tara AI</div>
   <div class="sec-title">Everything you need to create<br><mark>AI videos like a pro</mark></div>
-  <p class="sec-sub">Five powerful tools in one place — all optimized for the world's leading AI video platforms.</p>
+  <p class="sec-sub">Five powerful tools in one place — everything you need for AI video creation.</p>
   <div class="feat-grid">
     <div class="fc"><div class="fc-ico">📹</div><h3>Video to Prompt</h3><p>Upload any video — Tara extracts frames at key moments and generates optimized scene prompts to recreate it with AI.</p></div>
     <div class="fc"><div class="fc-ico">🖼️</div><h3>Image to Prompt</h3><p>Drop any photo or image and get a detailed AI video prompt, image prompt, or both — in seconds.</p></div>
@@ -530,7 +503,7 @@ canvas{display:none}
 <div class="divider"></div>
 <div id="platforms" class="pl-section">
   <div class="sec-label">Supported platforms</div>
-  <div class="sec-title">Prompts optimized for<br><mark>every AI video tool</mark></div>
+  <div class="sec-title">Works great with<br><mark>every AI video tool</mark></div>
   <div class="pl-grid">
     <div class="pc"><div class="pc-ico ico-p">🎬</div><div><h4>Veo 3 <span class="new-pill">NEW</span></h4><p>Google's most advanced model — native audio, dialogue, up to 8K</p></div></div>
     <div class="pc"><div class="pc-ico ico-b">🌐</div><div><h4>Sora</h4><p>OpenAI's text-to-video — best for realistic, physics-accurate scenes</p></div></div>
@@ -548,7 +521,7 @@ canvas{display:none}
   <div class="sec-title" style="text-align:center">From idea to AI video<br>in <mark>three steps</mark></div>
   <div class="steps">
     <div class="step"><div class="sn">1</div><h3>Upload or describe</h3><p>Drop a video, upload an image, or simply describe your idea. Tara accepts any input.</p></div>
-    <div class="step"><div class="sn">2</div><h3>Choose your settings</h3><p>Pick your platform, style, mood and voiceover tone. Tara adapts every prompt to match.</p></div>
+    <div class="step"><div class="sn">2</div><h3>Choose your settings</h3><p>Pick your style, mood and voiceover tone. Tara adapts every prompt to match.</p></div>
     <div class="step"><div class="sn">3</div><h3>Copy and create</h3><p>Copy your scene prompts and voiceover scripts directly into any AI video tool and hit generate.</p></div>
   </div>
 </div>
@@ -562,8 +535,8 @@ canvas{display:none}
   <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">What image formats does Image to Prompt support? <span class="fq-icon">+</span></div><div class="fa">We support JPG, PNG, WebP, GIF, HEIC and most other common image formats. You can upload screenshots, photos, concept art, stills from other videos, or any other visual.</div></div>
   <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">Is my uploaded content private and secure? <span class="fq-icon">+</span></div><div class="fa">Yes. Videos and images you upload are processed in memory and deleted from our servers within 24 hours. We never use your content to train AI models and we never share it with third parties.</div></div>
   <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">Do I need to create an account to use Tara AI? <span class="fq-icon">+</span></div><div class="fa">No. You can use all tools without creating an account. A free account lets you save your prompt history and access premium features.</div></div>
-  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">Which AI video platform produces the best results? <span class="fq-icon">+</span></div><div class="fa">It depends on your use case. Google Veo 3 is currently the most powerful for cinematic quality and native audio. Sora is best for realistic scenes. Runway Gen-4 gives the most precise motion control. Our prompts are optimized for each platform so results should be strong across all of them.</div></div>
-  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">How does the Storyboard Generator work? <span class="fq-icon">+</span></div><div class="fa">Describe your project, number of shots, style and platform. Tara AI writes a complete shot-by-shot storyboard with visual descriptions, camera direction, lighting notes and action cues — ready to paste into any AI video tool or share with your team.</div></div>
+  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">Which AI video platform produces the best results? <span class="fq-icon">+</span></div><div class="fa">It depends on your use case. Google Veo 3 is currently the most powerful for cinematic quality and native audio. Sora is best for realistic scenes. Runway Gen-4 gives the most precise motion control. Tara's prompts describe scenes, camera work and lighting in plain, detailed language that works well across all of them.</div></div>
+  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">How does the Storyboard Generator work? <span class="fq-icon">+</span></div><div class="fa">Describe your project, number of shots and style. Tara AI writes a complete shot-by-shot storyboard with visual descriptions, camera direction, lighting notes and action cues — ready to paste into any AI video tool or share with your team.</div></div>
 </div>
 
 <!-- ── BLOG ───────────────────────────────────────── -->
@@ -765,7 +738,7 @@ function renderScenes(raw,containerId,cntId,allTextVar,platform,voStyle,frames){
     var frame=frames&&frames[Math.min(idx,frames.length-1)];
 
     html+=`<div class="sc">
-      <div class="sc-hd"><span class="sc-num">Scene ${cnt}${title?' — '+title:''}</span><span class="sc-plat">${timecode||platform}</span></div>
+      <div class="sc-hd"><span class="sc-num">Scene ${cnt}${title?' — '+title:''}</span>${timecode?`<span class="sc-plat">${timecode}</span>`:''}</div>
       <div class="sc-body">
         ${frame?`<div class="sc-frame"><canvas id="sfc-${cnt}"></canvas></div>`:''}
         <div class="lbl">Prompt</div>
@@ -786,7 +759,7 @@ function renderScenes(raw,containerId,cntId,allTextVar,platform,voStyle,frames){
   });
 
   if(!cnt){
-    html='<div class="sc"><div class="sc-hd"><span class="sc-num">Result</span><span class="sc-plat">'+platform+'</span></div><div class="sc-body"><div class="lbl">Response</div><div class="prompt-box" style="white-space:pre-wrap">'+raw.replace(/</g,'&lt;')+'</div><button class="cp-sc" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy</button></div></div>';
+    html='<div class="sc"><div class="sc-hd"><span class="sc-num">Result</span></div><div class="sc-body"><div class="lbl">Response</div><div class="prompt-box" style="white-space:pre-wrap">'+raw.replace(/</g,'&lt;')+'</div><button class="cp-sc" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy</button></div></div>';
     allText=raw;
   }
   document.getElementById(containerId).innerHTML=html;
@@ -843,7 +816,7 @@ async function analyzeVideo(){
   var imgBlocks=frames.map(f=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:f.split(',')[1]}}));
   var dur=Math.round(v.duration);
   var voInstr=voStyle==='none'?'No voiceover.':'Include a '+voStyle+' VOICEOVER for each scene.';
-  var textBlock={type:'text',text:`Analyze these ${n} video frames (total duration ~${dur}s). Generate ${n} scene prompts optimized for ${platform}.\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY as:\nSCENE [n]: [title]\nTIMECODE: [start–end]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera move]\nLIGHTING: [lighting]\nTAGS: [3-5 tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script 1-2 sentences]\n':''}\nSeparate with ---\nWrite all ${n} scenes.`};
+  var textBlock={type:'text',text:`Analyze these ${n} video frames (total duration ~${dur}s). Generate ${n} scene prompts for AI video generation.\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY as:\nSCENE [n]: [title]\nTIMECODE: [start–end]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera move]\nLIGHTING: [lighting]\nTAGS: [3-5 tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script 1-2 sentences]\n':''}\nSeparate with ---\nWrite all ${n} scenes.`};
   try{
     var raw=await callClaude([{role:'user',content:[...imgBlocks,textBlock]}], 400+n*350);
     stopLoad('v-load',timer);btn.disabled=false;
@@ -876,7 +849,7 @@ async function analyzeImage(){
       ?'Generate BOTH a video prompt AND an image prompt. Format:\nVIDEO PROMPT: [detailed]\nIMAGE PROMPT: [detailed]\nCAMERA: [move]\nLIGHTING: [lighting]\nTAGS: [5 tags]\nVOICEOVER: [one sentence narration]'
       :outputType==='image prompt'
       ?'Generate an IMAGE PROMPT. Format:\nPROMPT: [detailed image generation prompt]\nTAGS: [5 style tags]\nLIGHTING: [lighting]'
-      :`Generate a VIDEO PROMPT optimized for ${platform}. Format:\nSCENE 1: Visual analysis\nPROMPT: [detailed cinematic video prompt, 3-4 sentences]\nCAMERA: [${cam}]\nLIGHTING: [lighting]\nTAGS: [5 tags]\nVOICEOVER: [one evocative sentence]`;
+      :`Generate a VIDEO PROMPT for AI video generation. Format:\nSCENE 1: Visual analysis\nPROMPT: [detailed cinematic video prompt, 3-4 sentences]\nCAMERA: [${cam}]\nLIGHTING: [lighting]\nTAGS: [5 tags]\nVOICEOVER: [one evocative sentence]`;
     var txt=`Analyze this image and ${promptInstr}\nStyle: ${style}.${extra?' '+extra:''}`;
     try{
       var raw=await callClaude([{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:txt}]}]);
@@ -907,7 +880,7 @@ async function generateText(){
   document.getElementById('t-out').style.display='none';
   var timer=startLoad('t-load','t-ltxt',['Writing prompts…','Crafting scenes…','Adding voiceover…','Polishing output…']);
   var voInstr=voStyle==='none'?'No voiceover.':'Include a '+voStyle+' VOICEOVER for each scene, 1-2 sentences.';
-  var msg=`Generate exactly ${n} scene prompts for this video description, optimized for ${platform}.\n\nDescription: ${desc}\n\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY:\nSCENE [n]: [title]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera movement]\nLIGHTING: [lighting]\nTAGS: [3-5 comma-separated tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script]\n':''}\nSeparate with ---\nWrite all ${n} scenes now.`;
+  var msg=`Generate exactly ${n} scene prompts for this video description.\n\nDescription: ${desc}\n\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY:\nSCENE [n]: [title]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera movement]\nLIGHTING: [lighting]\nTAGS: [3-5 comma-separated tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script]\n':''}\nSeparate with ---\nWrite all ${n} scenes now.`;
   try{
     var raw=await callClaude([{role:'user',content:msg}], 400+n*350);
     stopLoad('t-load',timer);
@@ -948,7 +921,7 @@ async function generateStoryboard(){
   var platform=gc('sb-pl')||'Veo 3';
   document.getElementById('sb-out').style.display='none';
   var timer=startLoad('sb-load',null,['Building storyboard…','Writing shot list…','Adding camera notes…']);
-  var msg=`Create a ${n}-shot storyboard for the following project, optimized for ${platform}.\n\nProject: ${desc}\nStyle: ${style}\n\nFor each shot, format EXACTLY as:\nSCENE [n]: [shot title]\nPROMPT: [Detailed visual description and AI video prompt, 2-3 sentences]\nCAMERA: [camera angle and movement]\nLIGHTING: [lighting setup]\nACTION: [what happens in this shot, character action, dialogue cue]\nTAGS: [3-4 tags]\n\nSeparate with ---\nWrite all ${n} shots.`;
+  var msg=`Create a ${n}-shot storyboard for the following project.\n\nProject: ${desc}\nStyle: ${style}\n\nFor each shot, format EXACTLY as:\nSCENE [n]: [shot title]\nPROMPT: [Detailed visual description and AI video prompt, 2-3 sentences]\nCAMERA: [camera angle and movement]\nLIGHTING: [lighting setup]\nACTION: [what happens in this shot, character action, dialogue cue]\nTAGS: [3-4 tags]\n\nSeparate with ---\nWrite all ${n} shots.`;
   try{
     var raw=await callClaude([{role:'user',content:msg}],400+n*350);
     stopLoad('sb-load',timer);
