@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Tara AI — Turn any video or image into scene-by-scene AI prompts. Supports Veo 3, Sora, Runway, Kling and more. Free forever.">
+<title>Tara AI — Video & Image to AI Prompt Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Bricolage+Grotesque:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─────────────────────────────────────── */
+:root{
+  --bg:#08080e;
+  --bg1:#0e0e18;
+  --bg2:#131320;
+  --bg3:#18182a;
+  --bg4:#1e1e32;
+  --s:#f0f0ff;
+  --s2:#9898c0;
+  --s3:#52527a;
+  --s4:#2e2e50;
+  --acc:#7c5af0;
+  --acc2:#a480ff;
+  --acc3:#c9aeff;
+  --accs:rgba(124,90,240,.15);
+  --accb:rgba(124,90,240,.28);
+  --gr:#10b981;
+  --grb:rgba(16,185,129,.2);
+  --bd:rgba(255,255,255,.07);
+  --bd2:rgba(255,255,255,.13);
+  --bd3:rgba(255,255,255,.22);
+  --r:10px;--r2:16px;--r3:22px;
+  --font:'Inter',sans-serif;
+  --display:'Bricolage Grotesque',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--s);overflow-x:hidden;line-height:1.6}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--font);cursor:pointer}
+input,textarea,select{font-family:var(--font)}
+
+/* ─── NAV ────────────────────────────────────────── */
+.nav{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:rgba(8,8,14,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:999}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:800;font-size:1.15rem;color:#fff}
+.logo-gem{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#7c5af0,#a480ff);display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-links{display:flex;gap:2px}
+.nav-links a{padding:6px 13px;border-radius:var(--r);font-size:13.5px;font-weight:500;color:var(--s2);transition:all .12s}
+.nav-links a:hover,.nav-links a.on{color:#fff;background:rgba(255,255,255,.07)}
+.nav-right{display:flex;gap:8px;align-items:center}
+.nbtn{padding:7px 16px;border-radius:var(--r);font-size:13.5px;font-weight:500;border:none;transition:all .12s}
+.nbtn.ghost{background:transparent;color:var(--s2);border:1px solid var(--bd2)}
+.nbtn.ghost:hover{color:#fff;border-color:var(--bd3)}
+.nbtn.solid{background:var(--acc);color:#fff}
+.nbtn.solid:hover{background:#6b48e0}
+
+/* ─── HERO ───────────────────────────────────────── */
+.hero{padding:7rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(ellipse at 50% 40%,rgba(124,90,240,.18) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--acc3);background:var(--accs);border:1px solid var(--accb);padding:5px 14px;border-radius:30px;margin-bottom:1.4rem;letter-spacing:.02em}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,6.5vw,4.2rem);line-height:1.06;color:#fff;margin-bottom:1.25rem;letter-spacing:-.02em}
+.hero h1 mark{background:linear-gradient(135deg,var(--acc2),var(--acc3));-webkit-background-clip:text;background-clip:text;color:transparent;background-color:transparent}
+.hero-sub{font-size:1.05rem;color:var(--s2);max-width:560px;margin:0 auto 2.2rem;line-height:1.75}
+.hero-btns{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;margin-bottom:2.2rem}
+.hbtn{padding:13px 28px;border-radius:var(--r2);font-size:15px;font-weight:600;border:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s}
+.hbtn.p{background:var(--acc);color:#fff;box-shadow:0 10px 30px rgba(124,90,240,.3)}
+.hbtn.p:hover{background:#6b48e0;transform:translateY(-2px)}
+.hbtn.s{background:transparent;color:var(--s);border:1px solid var(--bd2)}
+.hbtn.s:hover{border-color:var(--bd3);color:#fff}
+.platforms{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+.pl{background:var(--bg2);border:1px solid var(--bd);border-radius:30px;padding:5px 14px;font-size:12.5px;color:var(--s3);font-weight:500;transition:all .12s}
+.pl:hover{border-color:var(--bd2);color:var(--s2)}
+.pl.hot{border-color:var(--accb);color:var(--acc3);background:var(--accs)}
+
+/* ─── TOOL TABS ──────────────────────────────────── */
+.tool-section{padding:2rem 2rem 5rem;max-width:900px;margin:0 auto}
+.tab-row{display:flex;gap:6px;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r2);padding:6px;margin-bottom:1.5rem}
+.tab{flex:1;min-width:120px;padding:10px 14px;border-radius:var(--r);border:none;background:transparent;color:var(--s2);font-size:13px;font-weight:500;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap}
+.tab:hover{color:#fff;background:rgba(255,255,255,.06)}
+.tab.on{background:var(--acc);color:#fff;box-shadow:0 4px 14px rgba(124,90,240,.3)}
+.tab .new{font-size:9px;font-weight:700;background:rgba(255,255,255,.25);padding:1px 6px;border-radius:8px}
+
+/* ─── PANELS ─────────────────────────────────────── */
+.panel{display:none}
+.panel.on{display:block}
+
+/* ─── CARDS ──────────────────────────────────────── */
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r3);overflow:hidden}
+.card-hd{padding:1.1rem 1.4rem .9rem;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px}
+.card-hd-ico{width:38px;height:38px;border-radius:10px;background:var(--accs);border:1px solid var(--accb);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.card-hd h2{font-size:1rem;font-weight:600;color:#fff}
+.card-hd p{font-size:12px;color:var(--s3)}
+.card-bd{padding:1.4rem}
+
+/* ─── FORM ───────────────────────────────────────── */
+.f{margin-bottom:1rem}
+.f label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--s2);margin-bottom:6px}
+.f label .opt{font-size:11px;color:var(--s3);font-weight:400}
+.f input,.f textarea,.f select{width:100%;font-size:14px;padding:11px 13px;border:1px solid var(--bd2);border-radius:var(--r);background:rgba(255,255,255,.035);color:var(--s);outline:none;transition:border-color .15s;resize:none}
+.f input::placeholder,.f textarea::placeholder{color:var(--s3)}
+.f input:focus,.f textarea:focus,.f select:focus{border-color:var(--acc);background:rgba(124,90,240,.06)}
+.f select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2352527a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;background-color:rgba(255,255,255,.035)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:6px 13px;border-radius:20px;border:1px solid var(--bd2);background:transparent;color:var(--s2);font-size:13px;font-weight:500;cursor:pointer;user-select:none;transition:all .12s}
+.chip:hover{border-color:var(--bd3);color:#fff}
+.chip.on{background:var(--accs);border-color:var(--accb);color:var(--acc3)}
+
+/* ─── UPLOAD ─────────────────────────────────────── */
+.upload-z{border:1.5px dashed var(--bd2);border-radius:var(--r2);padding:2.25rem 1.25rem;text-align:center;cursor:pointer;transition:all .15s;position:relative;background:rgba(255,255,255,.02)}
+.upload-z:hover,.upload-z.drag{border-color:var(--accb);background:var(--accs)}
+.upload-z input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-z .u-ico{font-size:2rem;margin-bottom:.6rem;color:var(--s3)}
+.upload-z .u-title{font-size:14.5px;font-weight:600;color:var(--s);margin-bottom:4px}
+.upload-z .u-sub{font-size:12.5px;color:var(--s3)}
+.preview-wrap{display:none;margin-top:.85rem}
+.preview-wrap video,.preview-wrap img{width:100%;border-radius:var(--r);background:#000;max-height:220px;object-fit:cover;display:block}
+.file-info{display:flex;align-items:center;gap:8px;margin-top:.6rem;padding:.6rem .85rem;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:var(--r)}
+.file-info .fi-txt{font-size:12.5px;color:var(--gr);flex:1}
+.fi-rm{font-size:12px;color:var(--s3);cursor:pointer;background:none;border:none;padding:2px 6px}
+.fi-rm:hover{color:var(--s)}
+
+/* ─── GEN BTN ────────────────────────────────────── */
+.gen-btn{width:100%;padding:13px;background:var(--acc);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:600;margin-top:.25rem;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 8px 24px rgba(124,90,240,.25)}
+.gen-btn:hover:not(:disabled){background:#6b48e0;transform:translateY(-1px)}
+.gen-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* ─── LOADING ────────────────────────────────────── */
+.load-row{display:none;align-items:center;gap:10px;padding:.8rem 0}
+.spin{width:18px;height:18px;border:2px solid var(--bd2);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{font-size:13.5px;color:var(--s2)}
+
+/* ─── OUTPUT ─────────────────────────────────────── */
+.out-wrap{display:none;margin-top:1.4rem}
+.out-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.out-hd h3{font-size:14.5px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}
+.cnt-badge{font-size:11px;font-weight:600;background:var(--grb);border:1px solid rgba(16,185,129,.3);color:var(--gr);padding:3px 10px;border-radius:20px}
+.copy-all{padding:7px 14px;background:var(--bg3);border:1px solid var(--bd2);border-radius:var(--r);font-size:12.5px;color:var(--s2);cursor:pointer;transition:all .12s}
+.copy-all:hover{border-color:var(--accb);color:var(--acc3)}
+
+.sc{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:10px;overflow:hidden}
+.sc-hd{padding:.65rem 1.1rem;background:var(--bg4);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.sc-num{font-size:12px;font-weight:600;color:var(--acc3);background:var(--accs);border:1px solid var(--accb);padding:2px 10px;border-radius:10px}
+.sc-plat{font-size:12px;color:var(--s3)}
+.sc-body{padding:1rem 1.1rem}
+.sc-frame{width:100%;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;margin-bottom:.85rem;background:var(--bg);border:1px solid var(--bd)}
+.sc-frame canvas,.sc-frame img{width:100%;height:100%;display:block;object-fit:cover}
+.lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--s3);margin-bottom:5px;margin-top:.85rem}
+.lbl:first-child{margin-top:0}
+.prompt-box{font-size:13.5px;color:var(--s);line-height:1.75;background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:var(--r);padding:.85rem 1rem}
+.vo-box{font-size:13.5px;color:var(--s);line-height:1.75;background:var(--accs);border:1px solid var(--accb);border-radius:var(--r);padding:.85rem 1rem}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.t{font-size:11.5px;color:var(--s2);background:var(--bg4);border:1px solid var(--bd);border-radius:10px;padding:3px 9px}
+.cp-sc{padding:5px 12px;background:transparent;border:1px solid var(--bd2);border-radius:var(--r);font-size:12px;color:var(--s2);cursor:pointer;margin-top:.85rem;transition:all .12s}
+.cp-sc:hover{border-color:var(--accb);color:var(--acc3)}
+.ok-msg{font-size:12.5px;color:var(--gr);margin-top:6px;display:none;font-weight:500}
+.reset-btn{width:100%;padding:10px;background:transparent;border:1px solid var(--bd2);border-radius:var(--r);font-size:13.5px;color:var(--s2);cursor:pointer;margin-top:.6rem;transition:all .12s}
+.reset-btn:hover{border-color:var(--bd3);color:#fff}
+
+/* ─── TIP BOX ────────────────────────────────────── */
+.tip{background:var(--accs);border:1px solid var(--accb);border-radius:var(--r);padding:.9rem 1rem;margin-bottom:1.1rem;font-size:13.5px;color:var(--acc3);line-height:1.65}
+.tip strong{color:#fff;font-weight:600}
+
+/* ─── FEATURES SECTION ───────────────────────────── */
+.feat-section{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+.sec-label{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--acc2);margin-bottom:.85rem}
+.sec-title{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,4vw,2.4rem);color:#fff;line-height:1.15;margin-bottom:.85rem}
+.sec-title mark{background:linear-gradient(135deg,var(--acc2),var(--acc3));-webkit-background-clip:text;background-clip:text;color:transparent;background-color:transparent}
+.sec-sub{font-size:1rem;color:var(--s2);max-width:560px;line-height:1.75}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:2rem}
+.fc{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r3);padding:1.5rem;transition:all .15s}
+.fc:hover{border-color:var(--accb);transform:translateY(-2px)}
+.fc-ico{width:44px;height:44px;border-radius:13px;background:var(--accs);border:1px solid var(--accb);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem}
+.fc h3{font-size:15px;font-weight:600;color:#fff;margin-bottom:.4rem}
+.fc p{font-size:13.5px;color:var(--s2);line-height:1.65}
+
+/* ─── PLATFORM SECTION ───────────────────────────── */
+.pl-section{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+.pl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:2rem}
+.pc{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r2);padding:1.4rem;display:flex;gap:13px;align-items:flex-start;transition:all .15s}
+.pc:hover{border-color:var(--bd2);transform:translateY(-1px)}
+.pc-ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.ico-p{background:linear-gradient(135deg,rgba(124,90,240,.25),rgba(164,128,255,.1))}
+.ico-b{background:linear-gradient(135deg,rgba(59,130,246,.25),rgba(147,197,253,.1))}
+.ico-g{background:linear-gradient(135deg,rgba(16,185,129,.25),rgba(110,231,183,.1))}
+.ico-o{background:linear-gradient(135deg,rgba(245,158,11,.25),rgba(252,211,77,.1))}
+.ico-r{background:linear-gradient(135deg,rgba(239,68,68,.25),rgba(252,165,165,.1))}
+.ico-t{background:linear-gradient(135deg,rgba(20,184,166,.25),rgba(94,234,212,.1))}
+.pc h4{font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.pc p{font-size:12.5px;color:var(--s3);line-height:1.55}
+.new-pill{font-size:9.5px;font-weight:700;background:var(--acc);color:#fff;padding:2px 7px;border-radius:8px;letter-spacing:.03em}
+
+/* ─── STATS ──────────────────────────────────────── */
+.stats-band{padding:4rem 2rem;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.stats-inner{max-width:800px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--r2);overflow:hidden}
+.stat{background:var(--bg2);padding:1.75rem;text-align:center}
+.stat-n{font-family:var(--display);font-size:2.4rem;font-weight:800;color:#fff;line-height:1}
+.stat-l{font-size:13px;color:var(--s3);margin-top:.4rem}
+
+/* ─── HOW IT WORKS ───────────────────────────────── */
+.how-section{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:2rem;position:relative}
+.step{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r3);padding:1.5rem}
+.sn{width:34px;height:34px;border-radius:50%;background:var(--accs);border:1px solid var(--accb);color:var(--acc2);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.step h3{font-size:15px;font-weight:600;color:#fff;margin-bottom:.4rem}
+.step p{font-size:13.5px;color:var(--s2);line-height:1.65}
+
+/* ─── FAQ ────────────────────────────────────────── */
+.faq-section{padding:4rem 2rem;max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--bd);padding:1.1rem 0}
+.fq{font-size:15px;font-weight:600;color:#fff;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;user-select:none}
+.fq-icon{color:var(--s3);font-size:18px;transition:transform .2s;flex-shrink:0}
+.fa{font-size:13.5px;color:var(--s2);margin-top:8px;line-height:1.75;display:none}
+.faq-item.open .fa{display:block}
+.faq-item.open .fq-icon{transform:rotate(45deg)}
+
+/* ─── CTA ────────────────────────────────────────── */
+.cta-section{padding:3rem 2rem 5rem}
+.cta-box{background:linear-gradient(135deg,rgba(124,90,240,.16),rgba(164,128,255,.07));border:1px solid var(--accb);border-radius:24px;padding:4rem 2rem;text-align:center;max-width:1100px;margin:0 auto}
+.cta-box h2{font-family:var(--display);font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;color:#fff;margin-bottom:.75rem}
+.cta-box p{font-size:1rem;color:var(--s2);margin-bottom:2rem}
+
+/* ─── FOOTER ─────────────────────────────────────── */
+footer{background:var(--bg1);border-top:1px solid var(--bd);padding:3.5rem 2rem 1.75rem}
+.ft{max-width:1100px;margin:0 auto}
+.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;margin-bottom:3rem}
+.ft-brand p{font-size:13.5px;color:var(--s3);margin-top:.75rem;max-width:240px;line-height:1.65}
+.ft-col h4{font-size:12px;font-weight:600;color:var(--s2);text-transform:uppercase;letter-spacing:.09em;margin-bottom:1rem}
+.ft-col a{display:block;font-size:13.5px;color:var(--s3);margin-bottom:.55rem;transition:color .12s}
+.ft-col a:hover{color:var(--s)}
+.ft-bot{border-top:1px solid var(--bd);padding-top:1.25rem;display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--s3)}
+
+/* ─── MISC ───────────────────────────────────────── */
+.divider{height:1px;background:var(--bd);max-width:1100px;margin:0 auto}
+canvas{display:none}
+
+@media(max-width:768px){
+  .nav-links,.nav-right .nbtn.ghost{display:none}
+  .feat-grid,.steps,.pl-grid{grid-template-columns:1fr}
+  .stats-inner{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .row2{grid-template-columns:1fr}
+  .tab{font-size:12px;padding:8px 10px;min-width:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────── -->
+<nav class="nav">
+  <a href="#" class="nav-logo"><span class="logo-gem">🎬</span>Tara AI</a>
+  <div class="nav-links">
+    <a href="#tools" class="on">Tools</a>
+    <a href="#features">Features</a>
+    <a href="#platforms">Platforms</a>
+    <a href="#faq">FAQ</a>
+    <a href="#blog">Blog</a>
+  </div>
+  <div class="nav-right">
+    <button class="nbtn ghost" onclick="showAuth('login')">Log in</button>
+    <button class="nbtn solid" onclick="showAuth('signup')">Sign up free</button>
+  </div>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div style="position:relative;z-index:1">
+    <div class="hero-eyebrow">✨ Now with Image to Prompt &amp; Voiceover</div>
+    <h1>Turn any video or image<br>into <mark>AI-ready prompts</mark></h1>
+    <p class="hero-sub">Upload a video or image — Tara AI analyzes every scene and generates detailed prompts for Veo 3, Sora, Runway, Kling and more. With voiceover scripts included.</p>
+    <div class="hero-btns">
+      <a href="#tools"><button class="hbtn p">🎬 Try it free</button></a>
+      <a href="#features"><button class="hbtn s">See all features</button></a>
+    </div>
+    <div class="platforms">
+      <span class="pl hot">Veo 3 NEW</span>
+      <span class="pl">Sora</span>
+      <span class="pl">Runway Gen-4</span>
+      <span class="pl">Kling AI</span>
+      <span class="pl">Pika Labs</span>
+      <span class="pl">Hailuo</span>
+      <span class="pl">Seedance</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── STATS ─────────────────────────────────────── -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-n">100K+</div><div class="stat-l">Prompts generated</div></div>
+    <div class="stat"><div class="stat-n">7</div><div class="stat-l">AI platforms supported</div></div>
+    <div class="stat"><div class="stat-n">&lt;10s</div><div class="stat-l">Average process time</div></div>
+  </div>
+</div>
+
+<!-- ── TOOL AREA ──────────────────────────────────── -->
+<div id="tools" class="tool-section">
+  <div class="tab-row">
+    <button class="tab on" onclick="switchTab('v2p',this)">📹 Video to Prompt</button>
+    <button class="tab" onclick="switchTab('i2p',this)">🖼️ Image to Prompt</button>
+    <button class="tab" onclick="switchTab('txt',this)">✍️ Text to Prompt</button>
+    <button class="tab" onclick="switchTab('vo',this)">🎙️ Voiceover Script</button>
+    <button class="tab" onclick="switchTab('sb',this)">🎞️ Storyboard <span class="new">NEW</span></button>
+  </div>
+
+  <!-- ══ VIDEO TO PROMPT ══ -->
+  <div class="panel on" id="panel-v2p">
+    <div class="card">
+      <div class="card-hd"><span class="card-hd-ico">📹</span><div><h2>Video to Prompt</h2><p>Upload any video — get scene-by-scene AI prompts</p></div></div>
+      <div class="card-bd">
+        <div class="upload-z" id="vz" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event,'video','vz','vpv','vfi','vfn','vmv')">
+          <input type="file" id="v-inp" accept="video/*" onchange="loadMedia(this,'video','vpv','vfi','vfn','vmv','v-inp','vz')">
+          <div class="u-ico">🎬</div>
+          <div class="u-title">Drop video here or tap to upload</div>
+          <div class="u-sub">MP4, MOV, WebM, AVI — any length</div>
+        </div>
+        <div class="preview-wrap" id="vpv">
+          <video id="vmv" controls playsinline muted></video>
+          <div class="file-info"><span class="fi-txt" id="vfn">video.mp4</span><button class="fi-rm" onclick="clearMedia('vpv','vmv','v-inp','vz',true)">✕ Remove</button></div>
+        </div>
+        <canvas id="vc"></canvas>
+        <br>
+        <div class="row2">
+          <div class="f"><label>Scenes to generate</label>
+            <div class="chips" id="v-sc"><div class="chip" data-v="2">2</div><div class="chip on" data-v="3">3</div><div class="chip" data-v="4">4</div><div class="chip" data-v="5">5</div></div>
+          </div>
+          <div class="f"><label>Target platform</label>
+            <div class="chips" id="v-pl"><div class="chip on" data-v="Veo 3">Veo 3</div><div class="chip" data-v="Sora">Sora</div><div class="chip" data-v="Runway">Runway</div><div class="chip" data-v="Kling">Kling</div><div class="chip" data-v="Pika">Pika</div></div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="f"><label>Visual style</label>
+            <select id="v-sty"><option>Cinematic</option><option>Photorealistic</option><option>Anime</option><option>Documentary</option><option>Vintage film</option><option>Surreal</option><option>3D render</option></select>
+          </div>
+          <div class="f"><label>Mood</label>
+            <select id="v-mod"><option>Epic</option><option>Peaceful</option><option>Mysterious</option><option>Energetic</option><option>Melancholic</option><option>Tense</option><option>Joyful</option></select>
+          </div>
+        </div>
+        <div class="f"><label>Voiceover <span class="opt">(optional)</span></label>
+          <div class="chips" id="v-vo"><div class="chip on" data-v="narrative">Narrative</div><div class="chip" data-v="documentary">Documentary</div><div class="chip" data-v="dramatic">Dramatic</div><div class="chip" data-v="none">None</div></div>
+        </div>
+        <div class="f"><label>Extra instructions <span class="opt">(optional)</span></label><input type="text" id="v-ex" placeholder="e.g. focus on lighting, include slow motion notes…"></div>
+        <button class="gen-btn" id="v-btn" onclick="analyzeVideo()" disabled>🎬 Analyze video &amp; generate prompts</button>
+        <div class="load-row" id="v-load"><div class="spin"></div><span class="load-txt" id="v-ltxt">Extracting frames…</span></div>
+        <div class="out-wrap" id="v-out">
+          <div class="out-hd"><h3>🎬 Scene prompts <span class="cnt-badge" id="v-cnt">3 scenes</span></h3><button class="copy-all" onclick="copyAll('v-alltext')">Copy all</button></div>
+          <div id="v-scenes"></div>
+          <div class="ok-msg" id="v-ok">All prompts copied!</div>
+          <button class="reset-btn" onclick="resetPanel('v-out','vpv','vmv','v-inp','vz',true)">↺ Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ IMAGE TO PROMPT ══ -->
+  <div class="panel" id="panel-i2p">
+    <div class="card">
+      <div class="card-hd"><span class="card-hd-ico">🖼️</span><div><h2>Image to Prompt</h2><p>Upload any image — get a detailed AI video prompt</p></div></div>
+      <div class="card-bd">
+        <div class="upload-z" id="iz" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropFile(event,'image','iz','ipv','ifi','ifn',null)">
+          <input type="file" id="i-inp" accept="image/*" onchange="loadMedia(this,'image','ipv','ifi','ifn',null,'i-inp','iz')">
+          <div class="u-ico">🖼️</div>
+          <div class="u-title">Drop image here or tap to upload</div>
+          <div class="u-sub">JPG, PNG, WebP, GIF — any size</div>
+        </div>
+        <div class="preview-wrap" id="ipv">
+          <img id="iimg" alt="preview">
+          <div class="file-info"><span class="fi-txt" id="ifn">image.jpg</span><button class="fi-rm" onclick="clearMedia('ipv','iimg','i-inp','iz',false)">✕ Remove</button></div>
+        </div>
+        <br>
+        <div class="row2">
+          <div class="f"><label>Target platform</label>
+            <div class="chips" id="i-pl"><div class="chip on" data-v="Veo 3">Veo 3</div><div class="chip" data-v="Sora">Sora</div><div class="chip" data-v="Runway">Runway</div><div class="chip" data-v="Kling">Kling</div><div class="chip" data-v="Pika">Pika</div></div>
+          </div>
+          <div class="f"><label>Output type</label>
+            <div class="chips" id="i-ot"><div class="chip on" data-v="video prompt">Video Prompt</div><div class="chip" data-v="image prompt">Image Prompt</div><div class="chip" data-v="both">Both</div></div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="f"><label>Visual style</label>
+            <select id="i-sty"><option>Cinematic</option><option>Photorealistic</option><option>Anime</option><option>Documentary</option><option>Vintage film</option><option>Surreal</option><option>3D render</option></select>
+          </div>
+          <div class="f"><label>Camera movement</label>
+            <select id="i-cam"><option>Slow push-in</option><option>Orbit</option><option>Drone flyover</option><option>Handheld</option><option>Static</option><option>Tracking shot</option></select>
+          </div>
+        </div>
+        <div class="f"><label>Extra instructions <span class="opt">(optional)</span></label><input type="text" id="i-ex" placeholder="e.g. add rain, sunset lighting, dramatic score…"></div>
+        <button class="gen-btn" id="i-btn" onclick="analyzeImage()" disabled>🖼️ Generate prompt from image</button>
+        <div class="load-row" id="i-load"><div class="spin"></div><span class="load-txt" id="i-ltxt">Analyzing image…</span></div>
+        <div class="out-wrap" id="i-out">
+          <div class="out-hd"><h3>🖼️ Generated prompt</h3><button class="copy-all" onclick="copyAll('i-alltext')">Copy all</button></div>
+          <div id="i-scenes"></div>
+          <div class="ok-msg" id="i-ok">Copied!</div>
+          <button class="reset-btn" onclick="resetPanel('i-out','ipv','iimg','i-inp','iz',false)">↺ Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TEXT TO PROMPT ══ -->
+  <div class="panel" id="panel-txt">
+    <div class="card">
+      <div class="card-hd"><span class="card-hd-ico">✍️</span><div><h2>Text to Prompt</h2><p>Describe your video — get scene-by-scene prompts</p></div></div>
+      <div class="card-bd">
+        <div class="f"><label>Describe your video</label>
+          <textarea id="t-desc" rows="4" placeholder="e.g. A travel vlog of Tokyo at night — starting from Shibuya crossing, then ramen stalls, then a quiet shrine, ending with a rooftop city view at golden hour…"></textarea>
+        </div>
+        <div class="row2">
+          <div class="f"><label>Number of scenes</label>
+            <div class="chips" id="t-sc"><div class="chip" data-v="2">2</div><div class="chip on" data-v="3">3</div><div class="chip" data-v="4">4</div><div class="chip" data-v="5">5</div></div>
+          </div>
+          <div class="f"><label>Platform</label>
+            <div class="chips" id="t-pl"><div class="chip on" data-v="Veo 3">Veo 3</div><div class="chip" data-v="Sora">Sora</div><div class="chip" data-v="Runway">Runway</div><div class="chip" data-v="Kling">Kling</div><div class="chip" data-v="Pika">Pika</div></div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="f"><label>Style</label><select id="t-sty"><option>Cinematic</option><option>Photorealistic</option><option>Anime</option><option>Documentary</option><option>Vintage film</option><option>Surreal</option></select></div>
+          <div class="f"><label>Mood</label><select id="t-mod"><option>Epic</option><option>Peaceful</option><option>Mysterious</option><option>Energetic</option><option>Melancholic</option><option>Tense</option></select></div>
+        </div>
+        <div class="f"><label>Voiceover</label>
+          <div class="chips" id="t-vo"><div class="chip on" data-v="narrative">Narrative</div><div class="chip" data-v="documentary">Documentary</div><div class="chip" data-v="dramatic">Dramatic</div><div class="chip" data-v="none">None</div></div>
+        </div>
+        <div class="f"><label>Extra <span class="opt">(optional)</span></label><input type="text" id="t-ex" placeholder="e.g. include drone shots, golden tones…"></div>
+        <button class="gen-btn" onclick="generateText()">✍️ Generate scene prompts</button>
+        <div class="load-row" id="t-load"><div class="spin"></div><span class="load-txt" id="t-ltxt">Writing prompts…</span></div>
+        <div class="out-wrap" id="t-out">
+          <div class="out-hd"><h3>✍️ Scene prompts <span class="cnt-badge" id="t-cnt">3 scenes</span></h3><button class="copy-all" onclick="copyAll('t-alltext')">Copy all</button></div>
+          <div id="t-scenes"></div>
+          <div class="ok-msg" id="t-ok">All prompts copied!</div>
+          <button class="reset-btn" onclick="document.getElementById('t-out').style.display='none';document.getElementById('t-desc').value=''">↺ Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VOICEOVER SCRIPT ══ -->
+  <div class="panel" id="panel-vo">
+    <div class="card">
+      <div class="card-hd"><span class="card-hd-ico">🎙️</span><div><h2>Voiceover Script Generator</h2><p>Generate professional narration for your video</p></div></div>
+      <div class="card-bd">
+        <div class="f"><label>What is your video about?</label>
+          <textarea id="vo-desc" rows="3" placeholder="e.g. A product launch video for a new AI camera app, showcasing features and lifestyle shots…"></textarea>
+        </div>
+        <div class="row2">
+          <div class="f"><label>Tone</label>
+            <div class="chips" id="vo-tone">
+              <div class="chip on" data-v="warm and narrative">Warm</div>
+              <div class="chip" data-v="energetic and upbeat">Energetic</div>
+              <div class="chip" data-v="deep and dramatic">Dramatic</div>
+              <div class="chip" data-v="calm and documentary">Documentary</div>
+              <div class="chip" data-v="corporate professional">Corporate</div>
+            </div>
+          </div>
+          <div class="f"><label>Length</label>
+            <div class="chips" id="vo-len">
+              <div class="chip on" data-v="30 seconds">30s</div>
+              <div class="chip" data-v="60 seconds">60s</div>
+              <div class="chip" data-v="2 minutes">2 min</div>
+              <div class="chip" data-v="custom length">Custom</div>
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="f"><label>Voice gender</label><select id="vo-gen"><option>Male</option><option>Female</option><option>Neutral</option></select></div>
+          <div class="f"><label>Target audience</label><select id="vo-aud"><option>General audience</option><option>Young adults</option><option>Professionals</option><option>Children</option><option>Creators</option></select></div>
+        </div>
+        <div class="f"><label>Key message or call to action <span class="opt">(optional)</span></label><input type="text" id="vo-cta" placeholder="e.g. Download the app today — link in bio"></div>
+        <button class="gen-btn" onclick="generateVoiceover()">🎙️ Generate voiceover script</button>
+        <div class="load-row" id="vo-load"><div class="spin"></div><span class="load-txt">Writing your script…</span></div>
+        <div class="out-wrap" id="vo-out">
+          <div class="out-hd"><h3>🎙️ Voiceover script</h3><button class="copy-all" onclick="copyAll('vo-alltext')">Copy script</button></div>
+          <div id="vo-scenes"></div>
+          <div class="ok-msg" id="vo-ok">Copied!</div>
+          <button class="reset-btn" onclick="document.getElementById('vo-out').style.display='none';document.getElementById('vo-desc').value=''">↺ Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STORYBOARD ══ -->
+  <div class="panel" id="panel-sb">
+    <div class="card">
+      <div class="card-hd"><span class="card-hd-ico">🎞️</span><div><h2>Storyboard Generator</h2><p>Generate a full shot-by-shot storyboard from your idea</p></div></div>
+      <div class="card-bd">
+        <div class="tip"><strong>Pro tip:</strong> The more detail you add about characters, locations and action, the richer your storyboard will be.</div>
+        <div class="f"><label>Project description</label>
+          <textarea id="sb-desc" rows="4" placeholder="e.g. A 60-second ad for a luxury watch brand. Opens on a mountain summit at dawn, a man checks his watch, looks at the horizon, then cuts to close-ups of the watch mechanism, ending with a brand reveal on white background…"></textarea>
+        </div>
+        <div class="row2">
+          <div class="f"><label>Number of shots</label>
+            <div class="chips" id="sb-sc"><div class="chip" data-v="4">4</div><div class="chip on" data-v="6">6</div><div class="chip" data-v="8">8</div><div class="chip" data-v="10">10</div></div>
+          </div>
+          <div class="f"><label>Style</label><select id="sb-sty"><option>Cinematic live action</option><option>Animated</option><option>Anime</option><option>Documentary</option><option>Commercial</option><option>Music video</option></select></div>
+        </div>
+        <div class="f"><label>Target platform</label>
+          <div class="chips" id="sb-pl"><div class="chip on" data-v="Veo 3">Veo 3</div><div class="chip" data-v="Sora">Sora</div><div class="chip" data-v="Runway">Runway</div><div class="chip" data-v="Kling">Kling</div></div>
+        </div>
+        <button class="gen-btn" onclick="generateStoryboard()">🎞️ Generate storyboard</button>
+        <div class="load-row" id="sb-load"><div class="spin"></div><span class="load-txt">Building your storyboard…</span></div>
+        <div class="out-wrap" id="sb-out">
+          <div class="out-hd"><h3>🎞️ Storyboard <span class="cnt-badge" id="sb-cnt">6 shots</span></h3><button class="copy-all" onclick="copyAll('sb-alltext')">Copy all</button></div>
+          <div id="sb-scenes"></div>
+          <div class="ok-msg" id="sb-ok">Copied!</div>
+          <button class="reset-btn" onclick="document.getElementById('sb-out').style.display='none';document.getElementById('sb-desc').value=''">↺ Start over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FEATURES ───────────────────────────────────── -->
+<div class="divider"></div>
+<div id="features" class="feat-section">
+  <div class="sec-label">Why Tara AI</div>
+  <div class="sec-title">Everything you need to create<br><mark>AI videos like a pro</mark></div>
+  <p class="sec-sub">Five powerful tools in one place — all optimized for the world's leading AI video platforms.</p>
+  <div class="feat-grid">
+    <div class="fc"><div class="fc-ico">📹</div><h3>Video to Prompt</h3><p>Upload any video — Tara extracts frames at key moments and generates optimized scene prompts to recreate it with AI.</p></div>
+    <div class="fc"><div class="fc-ico">🖼️</div><h3>Image to Prompt</h3><p>Drop any photo or image and get a detailed AI video prompt, image prompt, or both — in seconds.</p></div>
+    <div class="fc"><div class="fc-ico">✍️</div><h3>Text to Prompt</h3><p>Describe your idea and get a complete scene-by-scene prompt breakdown with camera, lighting and mood.</p></div>
+    <div class="fc"><div class="fc-ico">🎙️</div><h3>Voiceover Scripts</h3><p>Generate professional narration scripts in any tone — dramatic, documentary, warm or corporate — synced to your video length.</p></div>
+    <div class="fc"><div class="fc-ico">🎞️</div><h3>Storyboard Generator</h3><p>Turn any concept into a full shot-by-shot storyboard with camera directions, action notes and visual descriptions.</p></div>
+    <div class="fc"><div class="fc-ico">⚡</div><h3>Instant &amp; Free</h3><p>Results in under 10 seconds. No account required to start. No credit card. A generous free plan forever.</p></div>
+  </div>
+</div>
+
+<!-- ── PLATFORMS ──────────────────────────────────── -->
+<div class="divider"></div>
+<div id="platforms" class="pl-section">
+  <div class="sec-label">Supported platforms</div>
+  <div class="sec-title">Prompts optimized for<br><mark>every AI video tool</mark></div>
+  <div class="pl-grid">
+    <div class="pc"><div class="pc-ico ico-p">🎬</div><div><h4>Veo 3 <span class="new-pill">NEW</span></h4><p>Google's most advanced model — native audio, dialogue, up to 8K</p></div></div>
+    <div class="pc"><div class="pc-ico ico-b">🌐</div><div><h4>Sora</h4><p>OpenAI's text-to-video — best for realistic, physics-accurate scenes</p></div></div>
+    <div class="pc"><div class="pc-ico ico-g">✈️</div><div><h4>Runway Gen-4</h4><p>Professional-grade with precise motion and color control</p></div></div>
+    <div class="pc"><div class="pc-ico ico-o">⚡</div><div><h4>Kling AI</h4><p>Fast, high-quality generation with great style range</p></div></div>
+    <div class="pc"><div class="pc-ico ico-r">🎨</div><div><h4>Pika Labs</h4><p>Creative and stylized short clips with unique transformations</p></div></div>
+    <div class="pc"><div class="pc-ico ico-t">🌙</div><div><h4>Seedance</h4><p>ByteDance's smooth multi-shot cinematic video generator</p></div></div>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ───────────────────────────────── -->
+<div class="divider"></div>
+<div class="how-section">
+  <div class="sec-label center" style="text-align:center">How it works</div>
+  <div class="sec-title" style="text-align:center">From idea to AI video<br>in <mark>three steps</mark></div>
+  <div class="steps">
+    <div class="step"><div class="sn">1</div><h3>Upload or describe</h3><p>Drop a video, upload an image, or simply describe your idea. Tara accepts any input.</p></div>
+    <div class="step"><div class="sn">2</div><h3>Choose your settings</h3><p>Pick your platform, style, mood and voiceover tone. Tara adapts every prompt to match.</p></div>
+    <div class="step"><div class="sn">3</div><h3>Copy and create</h3><p>Copy your scene prompts and voiceover scripts directly into any AI video tool and hit generate.</p></div>
+  </div>
+</div>
+
+<!-- ── FAQ ────────────────────────────────────────── -->
+<div class="divider"></div>
+<div id="faq" class="faq-section">
+  <div class="sec-label" style="text-align:center">FAQ</div>
+  <div class="sec-title" style="text-align:center;margin-bottom:2rem">Common questions</div>
+  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">What formats does Tara AI support for video upload? <span class="fq-icon">+</span></div><div class="fa">Tara AI supports all common video formats including MP4, MOV, WebM, AVI, FLV, WMV, MKV and 3GPP. There is no strict file size limit but we recommend keeping uploads under 500MB for the best performance.</div></div>
+  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">What image formats does Image to Prompt support? <span class="fq-icon">+</span></div><div class="fa">We support JPG, PNG, WebP, GIF, HEIC and most other common image formats. You can upload screenshots, photos, concept art, stills from other videos, or any other visual.</div></div>
+  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">Is my uploaded content private and secure? <span class="fq-icon">+</span></div><div class="fa">Yes. Videos and images you upload are processed in memory and deleted from our servers within 24 hours. We never use your content to train AI models and we never share it with third parties.</div></div>
+  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">Do I need to create an account to use Tara AI? <span class="fq-icon">+</span></div><div class="fa">No. You can use all tools without creating an account. A free account lets you save your prompt history and access premium features.</div></div>
+  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">Which AI video platform produces the best results? <span class="fq-icon">+</span></div><div class="fa">It depends on your use case. Google Veo 3 is currently the most powerful for cinematic quality and native audio. Sora is best for realistic scenes. Runway Gen-4 gives the most precise motion control. Our prompts are optimized for each platform so results should be strong across all of them.</div></div>
+  <div class="faq-item"><div class="fq" onclick="this.parentElement.classList.toggle('open')">How does the Storyboard Generator work? <span class="fq-icon">+</span></div><div class="fa">Describe your project, number of shots, style and platform. Tara AI writes a complete shot-by-shot storyboard with visual descriptions, camera direction, lighting notes and action cues — ready to paste into any AI video tool or share with your team.</div></div>
+</div>
+
+<!-- ── BLOG ───────────────────────────────────────── -->
+<div class="divider"></div>
+<div id="blog" class="feat-section">
+  <div class="sec-label">Blog</div>
+  <div class="sec-title">AI video <mark>guides & tips</mark></div>
+  <div class="feat-grid" style="margin-top:2rem">
+    <div class="fc" style="cursor:pointer"><div style="font-size:2rem;margin-bottom:.85rem">🎬</div><div style="font-size:11px;font-weight:600;color:var(--acc2);text-transform:uppercase;margin-bottom:.5rem">Guide · Veo 3</div><h3 style="line-height:1.4">Google Veo 3 complete guide: audio, dialogue and cinematic quality</h3><div style="font-size:12px;color:var(--s3);margin-top:.6rem">June 2025 · 10 min read</div></div>
+    <div class="fc" style="cursor:pointer"><div style="font-size:2rem;margin-bottom:.85rem">🌐</div><div style="font-size:11px;font-weight:600;color:var(--acc2);text-transform:uppercase;margin-bottom:.5rem">Tutorial · Sora</div><h3 style="line-height:1.4">How to write perfect Sora prompts: the complete 2025 guide</h3><div style="font-size:12px;color:var(--s3);margin-top:.6rem">May 2025 · 7 min read</div></div>
+    <div class="fc" style="cursor:pointer"><div style="font-size:2rem;margin-bottom:.85rem">🎨</div><div style="font-size:11px;font-weight:600;color:var(--acc2);text-transform:uppercase;margin-bottom:.5rem">Prompts</div><h3 style="line-height:1.4">10 cinematic AI video prompt templates you can copy right now</h3><div style="font-size:12px;color:var(--s3);margin-top:.6rem">April 2025 · 5 min read</div></div>
+  </div>
+</div>
+
+<!-- ── CTA ────────────────────────────────────────── -->
+<div class="cta-section">
+  <div class="cta-box">
+    <div class="hero-eyebrow" style="margin:0 auto 1.25rem">🆓 Free forever plan</div>
+    <h2>Start creating AI videos today</h2>
+    <p>No credit card. No limits on the free plan. Join thousands of creators already using Tara AI.</p>
+    <button class="hbtn p" onclick="showAuth('signup')">Create free account</button>
+  </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div class="ft">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div class="nav-logo" style="display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:800;font-size:1.1rem;margin-bottom:.6rem"><span class="logo-gem">🎬</span>Tara AI</div>
+        <p>Turn any video or image into professional AI prompts. Supports Veo 3, Sora, Runway, Kling and more.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Tools</h4>
+        <a href="#" onclick="switchTab('v2p',document.querySelector('[onclick*=v2p]'));return false">Video to Prompt</a>
+        <a href="#" onclick="switchTab('i2p',document.querySelector('[onclick*=i2p]'));return false">Image to Prompt</a>
+        <a href="#" onclick="switchTab('txt',document.querySelector('[onclick*=txt]'));return false">Text to Prompt</a>
+        <a href="#" onclick="switchTab('vo',document.querySelector('[onclick*=vo]'));return false">Voiceover Script</a>
+        <a href="#" onclick="switchTab('sb',document.querySelector('[onclick*=sb]'));return false">Storyboard</a>
+      </div>
+      <div class="ft-col">
+        <h4>Platforms</h4>
+        <a href="#">Veo 3 Prompts</a>
+        <a href="#">Sora Prompts</a>
+        <a href="#">Runway Prompts</a>
+        <a href="#">Kling AI Prompts</a>
+        <a href="#">Pika Prompts</a>
+      </div>
+      <div class="ft-col">
+        <h4>Legal</h4>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms of Use</a>
+        <a href="mailto:support@tara.ai">Contact Us</a>
+      </div>
+    </div>
+    <div class="ft-bot"><span>© 2025 Tara AI. All rights reserved.</span><span>Made with ❤️ for creators</span></div>
+  </div>
+</footer>
+
+<!-- ── AUTH MODAL ─────────────────────────────────── -->
+<div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--bg2);border:1px solid var(--bd2);border-radius:var(--r3);padding:2rem;width:100%;max-width:420px;position:relative">
+    <button onclick="document.getElementById('auth-modal').style.display='none'" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--s3);font-size:18px;cursor:pointer">✕</button>
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-family:var(--display);font-weight:800;font-size:1.3rem;color:#fff;margin-bottom:3px">Tara AI</div>
+      <div id="auth-sub" style="font-size:13px;color:var(--s3)">Create your free account</div>
+    </div>
+    <div style="display:flex;background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:3px;gap:3px;margin-bottom:1.25rem">
+      <button id="tab-su" onclick="setAuthTab('signup')" style="flex:1;padding:8px;border-radius:8px;border:none;font-size:13.5px;font-weight:500;background:var(--acc);color:#fff;cursor:pointer">Sign up</button>
+      <button id="tab-li" onclick="setAuthTab('login')" style="flex:1;padding:8px;border-radius:8px;border:none;font-size:13.5px;font-weight:500;background:transparent;color:var(--s2);cursor:pointer">Log in</button>
+    </div>
+    <div id="auth-su">
+      <div class="f"><label>Name</label><input type="text" id="au-name" placeholder="Your name"></div>
+      <div class="f"><label>Email</label><input type="email" id="au-email" placeholder="you@example.com"></div>
+      <div class="f"><label>Password</label><input type="password" id="au-pass" placeholder="At least 8 characters"></div>
+      <button class="gen-btn" onclick="doAuth('signup')">Create free account</button>
+    </div>
+    <div id="auth-li" style="display:none">
+      <div class="f"><label>Email</label><input type="email" id="li-email" placeholder="you@example.com"></div>
+      <div class="f"><label>Password</label><input type="password" id="li-pass" placeholder="Your password"></div>
+      <button class="gen-btn" onclick="doAuth('login')">Log in</button>
+    </div>
+    <div id="auth-ok" style="display:none;text-align:center;padding:1.5rem 0">
+      <div style="font-size:2.5rem;margin-bottom:.75rem">🎉</div>
+      <div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:.4rem" id="auth-ok-title">Account created!</div>
+      <div style="font-size:13px;color:var(--s2)">You can now save prompts and access all features.</div>
+    </div>
+    <div style="font-size:11.5px;color:var(--s3);text-align:center;margin-top:.85rem">By continuing you agree to our <a href="#terms" style="color:var(--acc2)">Terms</a> and <a href="#privacy" style="color:var(--acc2)">Privacy Policy</a>.</div>
+  </div>
+</div>
+
+<script>
+// ── CHIP GROUPS ───────────────────────────────────
+document.querySelectorAll('.chips').forEach(g=>{
+  g.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click',()=>{g.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');});
+  });
+});
+function gc(id){var e=document.querySelector('#'+id+' .chip.on');return e?e.dataset.v:'';}
+
+// ── TAB SWITCHER ──────────────────────────────────
+function switchTab(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('panel-'+id).classList.add('on');
+  if(btn) btn.classList.add('on');
+  document.getElementById('tools').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── MEDIA LOAD ────────────────────────────────────
+function loadMedia(inp,type,pvId,fiId,fnId,elId,inpId,zoneId){
+  var f=inp.files[0];if(!f)return;
+  var url=URL.createObjectURL(f);
+  document.getElementById(zoneId).style.display='none';
+  document.getElementById(pvId).style.display='block';
+  document.getElementById(fnId).textContent=f.name+' · '+(f.size/1024/1024).toFixed(1)+'MB';
+  if(type==='video'){
+    var v=document.getElementById(elId);v.src=url;v.load();
+    v.onloadedmetadata=()=>{document.getElementById('v-btn').disabled=false;};
+  } else {
+    var img=document.getElementById(elId);img.src=url;
+    document.getElementById('i-btn').disabled=false;
+  }
+}
+function dropFile(ev,type,zoneId,pvId,fiId,fnId,elId){
+  ev.preventDefault();document.getElementById(zoneId).classList.remove('drag');
+  var f=ev.dataTransfer.files[0];if(!f)return;
+  var inp=document.getElementById(type==='video'?'v-inp':'i-inp');
+  var dt=new DataTransfer();dt.items.add(f);inp.files=dt.files;
+  loadMedia({files:[f]},type,pvId,fiId,fnId,elId,null,zoneId);
+}
+function clearMedia(pvId,elId,inpId,zoneId,isVideo){
+  document.getElementById(pvId).style.display='none';
+  document.getElementById(zoneId).style.display='block';
+  if(inpId) document.getElementById(inpId).value='';
+  if(isVideo) document.getElementById('v-btn').disabled=true;
+  else document.getElementById('i-btn').disabled=true;
+}
+function resetPanel(outId,pvId,elId,inpId,zoneId,isVideo){
+  document.getElementById(outId).style.display='none';
+  clearMedia(pvId,elId,inpId,zoneId,isVideo);
+}
+
+// ── FRAME EXTRACT ─────────────────────────────────
+function captureFrame(videoEl,t){
+  return new Promise(res=>{
+    var tmp=document.createElement('video');
+    tmp.src=videoEl.src;tmp.currentTime=t;tmp.muted=true;tmp.playsInline=true;
+    tmp.onloadeddata=()=>{
+      var c=document.getElementById('vc');c.width=320;c.height=180;
+      c.getContext('2d').drawImage(tmp,0,0,320,180);
+      res(c.toDataURL('image/jpeg',.75));tmp.remove();
+    };tmp.load();
+  });
+}
+async function extractFrames(videoEl,n){
+  var dur=videoEl.duration,frames=[];
+  for(var i=0;i<n;i++) frames.push(captureFrame(videoEl,(((i+.5)/n)*dur)));
+  return Promise.all(frames);
+}
+
+// ── API CALL ──────────────────────────────────────
+// Replace this with YOUR Cloudflare Worker URL after you deploy it (see worker.js)
+var PROXY_URL = 'https://tara-proxy.w15358203.workers.dev';
+
+async function callClaude(messages,maxTok=1000){
+  var r=await fetch(PROXY_URL,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxTok,messages})
+  });
+  var d=await r.json();
+  if(d.error){throw new Error(d.error.message||d.error);}
+  return d.content.map(b=>b.text||'').join('');
+}
+
+// ── RENDER SCENES ─────────────────────────────────
+function renderScenes(raw,containerId,cntId,allTextVar,platform,voStyle,frames){
+  var parts=raw.split(/---+/).filter(s=>s.trim());
+  var html='',allText='',cnt=0;
+  parts.forEach((part,idx)=>{
+    var lines=part.trim().split('\n').filter(l=>l.trim());
+    var title='',prompt='',camera='',lighting='',tags='',vo='',timecode='';
+    lines.forEach(l=>{
+      var t=l.trim();
+      if(/^SCENE\s*\d+:/i.test(t)) title=t.replace(/^SCENE\s*\d+:\s*/i,'').trim();
+      else if(/^TIMECODE:/i.test(t)) timecode=t.replace(/^TIMECODE:\s*/i,'').trim();
+      else if(/^PROMPT:/i.test(t)) prompt=t.replace(/^PROMPT:\s*/i,'').trim();
+      else if(/^VIDEO PROMPT:|^IMAGE PROMPT:|^BOTH:/i.test(t)) prompt+=(prompt?' / ':'')+t.replace(/^[^:]+:\s*/,'').trim();
+      else if(/^CAMERA:/i.test(t)) camera=t.replace(/^CAMERA:\s*/i,'').trim();
+      else if(/^LIGHTING:/i.test(t)) lighting=t.replace(/^LIGHTING:\s*/i,'').trim();
+      else if(/^TAGS:/i.test(t)) tags=t.replace(/^TAGS:\s*/i,'').trim();
+      else if(/^VOICEOVER:|^NARRATION:/i.test(t)) vo=t.replace(/^[^:]+:\s*/,'').trim();
+      else if(prompt&&!camera) prompt+=' '+t;
+    });
+    if(!prompt) return;
+    cnt++;
+    var tagArr=(tags||'').split(',').map(t=>t.trim()).filter(Boolean).slice(0,5);
+    var hasVO=vo&&vo.toLowerCase()!=='none'&&voStyle!=='none';
+    var frame=frames&&frames[Math.min(idx,frames.length-1)];
+
+    html+=`<div class="sc">
+      <div class="sc-hd"><span class="sc-num">Scene ${cnt}${title?' — '+title:''}</span><span class="sc-plat">${timecode||platform}</span></div>
+      <div class="sc-body">
+        ${frame?`<div class="sc-frame"><canvas id="sfc-${cnt}"></canvas></div>`:''}
+        <div class="lbl">Prompt</div>
+        <div class="prompt-box">${prompt}</div>
+        ${camera||lighting?`<div class="tag-row">${camera?`<span class="t">📷 ${camera}</span>`:''}${lighting?`<span class="t">💡 ${lighting}</span>`:''}</div>`:''}
+        ${tagArr.length?`<div class="tag-row">${tagArr.map(t=>`<span class="t">${t}</span>`).join('')}</div>`:''}
+        ${hasVO?`<div class="lbl" style="margin-top:.85rem">Voiceover</div><div class="vo-box">${vo}</div>`:''}
+        <button class="cp-sc" onclick="copyScene(this,${cnt})">Copy scene ${cnt}</button>
+      </div>
+    </div>`;
+
+    allText+=`--- SCENE ${cnt}${title?' — '+title:''}${timecode?' ('+timecode+')':''} ---\nPROMPT: ${prompt}\n`;
+    if(camera) allText+=`CAMERA: ${camera}\n`;
+    if(lighting) allText+=`LIGHTING: ${lighting}\n`;
+    if(tagArr.length) allText+=`TAGS: ${tagArr.join(', ')}\n`;
+    if(hasVO) allText+=`VOICEOVER: ${vo}\n`;
+    allText+='\n';
+  });
+
+  if(!cnt){html='<div style="text-align:center;padding:1.5rem;color:var(--s3);font-size:13.5px">No scenes parsed. Try a more detailed description.</div>';allText=raw;}
+  document.getElementById(containerId).innerHTML=html;
+  if(cntId) document.getElementById(cntId).textContent=cnt+' scene'+(cnt!==1?'s':'');
+  window[allTextVar]=allText;
+  if(frames) frames.forEach((f,i)=>{
+    var c=document.getElementById('sfc-'+(i+1));if(!c)return;
+    c.width=320;c.height=180;var img=new Image();img.onload=()=>c.getContext('2d').drawImage(img,0,0,320,180);img.src=f;
+    c.style.display='block';c.parentElement.style.display='block';
+  });
+}
+
+// ── COPY ──────────────────────────────────────────
+function copyScene(btn,num){
+  var card=btn.closest('.sc');
+  var p=card.querySelector('.prompt-box').textContent;
+  var v=card.querySelector('.vo-box');
+  var t='Scene '+num+'\n\n'+p+(v?'\n\nVoiceover: '+v.textContent:'');
+  navigator.clipboard.writeText(t).then(()=>{var o=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=o,1800);});
+}
+function copyAll(varName){
+  var t=window[varName]||'';
+  if(!t)return;
+  navigator.clipboard.writeText(t.trim()).then(()=>{
+    var prefix=varName.split('-')[0];
+    var el=document.getElementById(prefix+'-ok');
+    if(el){el.style.display='block';setTimeout(()=>el.style.display='none',2000);}
+  });
+}
+
+// ── LOADING MSGS ──────────────────────────────────
+function startLoad(loadId,ltxtId,msgs){
+  document.getElementById(loadId).style.display='flex';
+  var i=0,el=document.getElementById(ltxtId);if(!el)el=document.querySelector('#'+loadId+' .load-txt');
+  return setInterval(()=>{i=(i+1)%msgs.length;if(el)el.textContent=msgs[i];},1300);
+}
+function stopLoad(loadId,timer){clearInterval(timer);document.getElementById(loadId).style.display='none';}
+
+// ── VIDEO ANALYZER ────────────────────────────────
+async function analyzeVideo(){
+  var v=document.getElementById('vmv');
+  if(!v||!v.src)return;
+  var n=parseInt(gc('v-sc')||'3');
+  var platform=gc('v-pl')||'Veo 3';
+  var style=document.getElementById('v-sty').value;
+  var mood=document.getElementById('v-mod').value;
+  var voStyle=gc('v-vo')||'none';
+  var extra=document.getElementById('v-ex').value.trim();
+  var btn=document.getElementById('v-btn');
+  btn.disabled=true;
+  document.getElementById('v-out').style.display='none';
+  var timer=startLoad('v-load','v-ltxt',['Extracting frames…','Analyzing scenes…','Writing prompts…','Adding voiceover…']);
+  var frames=await extractFrames(v,n);
+  var imgBlocks=frames.map(f=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:f.split(',')[1]}}));
+  var dur=Math.round(v.duration);
+  var voInstr=voStyle==='none'?'No voiceover.':'Include a '+voStyle+' VOICEOVER for each scene.';
+  var textBlock={type:'text',text:`Analyze these ${n} video frames (total duration ~${dur}s). Generate ${n} scene prompts optimized for ${platform}.\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY as:\nSCENE [n]: [title]\nTIMECODE: [start–end]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera move]\nLIGHTING: [lighting]\nTAGS: [3-5 tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script 1-2 sentences]\n':''}\nSeparate with ---\nWrite all ${n} scenes.`};
+  try{
+    var raw=await callClaude([{role:'user',content:[...imgBlocks,textBlock]}]);
+    stopLoad('v-load',timer);btn.disabled=false;
+    renderScenes(raw,'v-scenes','v-cnt','v-alltext',platform,voStyle,frames);
+    document.getElementById('v-out').style.display='block';
+    document.getElementById('v-out').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){stopLoad('v-load',timer);btn.disabled=false;alert('Error. Please try again.');}
+}
+
+// ── IMAGE ANALYZER ────────────────────────────────
+async function analyzeImage(){
+  var img=document.getElementById('iimg');
+  if(!img||!img.src)return;
+  var platform=gc('i-pl')||'Veo 3';
+  var outputType=gc('i-ot')||'video prompt';
+  var style=document.getElementById('i-sty').value;
+  var cam=document.getElementById('i-cam').value;
+  var extra=document.getElementById('i-ex').value.trim();
+  var btn=document.getElementById('i-btn');
+  btn.disabled=true;
+  document.getElementById('i-out').style.display='none';
+  var timer=startLoad('i-load','i-ltxt',['Analyzing image…','Reading visual details…','Crafting prompt…']);
+  var c=document.createElement('canvas');
+  var im=new Image();
+  im.onload=async()=>{
+    c.width=Math.min(im.width,800);c.height=Math.round(im.height*(c.width/im.width));
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    var b64=c.toDataURL('image/jpeg',.8).split(',')[1];
+    var promptInstr=outputType==='both'
+      ?'Generate BOTH a video prompt AND an image prompt. Format:\nVIDEO PROMPT: [detailed]\nIMAGE PROMPT: [detailed]\nCAMERA: [move]\nLIGHTING: [lighting]\nTAGS: [5 tags]\nVOICEOVER: [one sentence narration]'
+      :outputType==='image prompt'
+      ?'Generate an IMAGE PROMPT. Format:\nPROMPT: [detailed image generation prompt]\nTAGS: [5 style tags]\nLIGHTING: [lighting]'
+      :`Generate a VIDEO PROMPT optimized for ${platform}. Format:\nSCENE 1: Visual analysis\nPROMPT: [detailed cinematic video prompt, 3-4 sentences]\nCAMERA: [${cam}]\nLIGHTING: [lighting]\nTAGS: [5 tags]\nVOICEOVER: [one evocative sentence]`;
+    var txt=`Analyze this image and ${promptInstr}\nStyle: ${style}.${extra?' '+extra:''}`;
+    try{
+      var raw=await callClaude([{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:txt}]}]);
+      stopLoad('i-load',timer);btn.disabled=false;
+      if(outputType==='image prompt'){
+        window['i-alltext']=raw;
+        document.getElementById('i-scenes').innerHTML=`<div class="sc"><div class="sc-hd"><span class="sc-num">Image Prompt</span><span class="sc-plat">Midjourney / DALL-E / Ideogram</span></div><div class="sc-body"><div class="lbl">Prompt</div><div class="prompt-box">${raw.replace(/\n/g,'<br>')}</div><button class="cp-sc" onclick="copyScene(this,1)">Copy prompt</button></div></div>`;
+      } else {
+        renderScenes(raw,'i-scenes',null,'i-alltext',platform,'narrative',null);
+      }
+      document.getElementById('i-out').style.display='block';
+      document.getElementById('i-out').scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(e){stopLoad('i-load',timer);btn.disabled=false;alert('Error. Please try again.');}
+  };
+  im.src=img.src;
+}
+
+// ── TEXT TO PROMPT ────────────────────────────────
+async function generateText(){
+  var desc=document.getElementById('t-desc').value.trim();
+  if(!desc){document.getElementById('t-desc').style.borderColor='var(--acc)';setTimeout(()=>document.getElementById('t-desc').style.borderColor='',1500);return;}
+  var n=parseInt(gc('t-sc')||'3');
+  var platform=gc('t-pl')||'Veo 3';
+  var style=document.getElementById('t-sty').value;
+  var mood=document.getElementById('t-mod').value;
+  var voStyle=gc('t-vo')||'none';
+  var extra=document.getElementById('t-ex').value.trim();
+  document.getElementById('t-out').style.display='none';
+  var timer=startLoad('t-load','t-ltxt',['Writing prompts…','Crafting scenes…','Adding voiceover…','Polishing output…']);
+  var voInstr=voStyle==='none'?'No voiceover.':'Include a '+voStyle+' VOICEOVER for each scene, 1-2 sentences.';
+  var msg=`Generate exactly ${n} scene prompts for this video description, optimized for ${platform}.\n\nDescription: ${desc}\n\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY:\nSCENE [n]: [title]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera movement]\nLIGHTING: [lighting]\nTAGS: [3-5 comma-separated tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script]\n':''}\nSeparate with ---\nWrite all ${n} scenes now.`;
+  try{
+    var raw=await callClaude([{role:'user',content:msg}]);
+    stopLoad('t-load',timer);
+    renderScenes(raw,'t-scenes','t-cnt','t-alltext',platform,voStyle,null);
+    document.getElementById('t-out').style.display='block';
+    document.getElementById('t-out').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){stopLoad('t-load',timer);alert('Error. Please try again.');}
+}
+
+// ── VOICEOVER GENERATOR ───────────────────────────
+async function generateVoiceover(){
+  var desc=document.getElementById('vo-desc').value.trim();
+  if(!desc){document.getElementById('vo-desc').style.borderColor='var(--acc)';setTimeout(()=>document.getElementById('vo-desc').style.borderColor='',1500);return;}
+  var tone=gc('vo-tone')||'warm and narrative';
+  var len=gc('vo-len')||'30 seconds';
+  var gen=document.getElementById('vo-gen').value;
+  var aud=document.getElementById('vo-aud').value;
+  var cta=document.getElementById('vo-cta').value.trim();
+  document.getElementById('vo-out').style.display='none';
+  var timer=startLoad('vo-load',null,['Writing your script…','Refining tone…','Finalizing narration…']);
+  var msg=`Write a professional voiceover script for the following video.\n\nVideo description: ${desc}\nTone: ${tone}\nLength: ${len}\nVoice: ${gen}\nAudience: ${aud}${cta?'\nCall to action: '+cta:''}\n\nWrite ONLY the voiceover script itself — the actual words to be spoken. Include timing cues like [0:00], [0:15] etc. Make it natural, engaging, and perfectly paced for ${len}.`;
+  try{
+    var raw=await callClaude([{role:'user',content:msg}],800);
+    stopLoad('vo-load',timer);
+    window['vo-alltext']=raw;
+    document.getElementById('vo-scenes').innerHTML=`<div class="sc"><div class="sc-hd"><span class="sc-num">Voiceover Script</span><span class="sc-plat">${len} · ${tone}</span></div><div class="sc-body"><div class="lbl">Script</div><div class="vo-box" style="white-space:pre-wrap">${raw}</div><button class="cp-sc" onclick="navigator.clipboard.writeText(document.querySelector('.vo-box').textContent).then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy script',1800)})">Copy script</button></div></div>`;
+    document.getElementById('vo-out').style.display='block';
+    document.getElementById('vo-out').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){stopLoad('vo-load',timer);alert('Error. Please try again.');}
+}
+
+// ── STORYBOARD ────────────────────────────────────
+async function generateStoryboard(){
+  var desc=document.getElementById('sb-desc').value.trim();
+  if(!desc){document.getElementById('sb-desc').style.borderColor='var(--acc)';setTimeout(()=>document.getElementById('sb-desc').style.borderColor='',1500);return;}
+  var n=parseInt(gc('sb-sc')||'6');
+  var style=document.getElementById('sb-sty').value;
+  var platform=gc('sb-pl')||'Veo 3';
+  document.getElementById('sb-out').style.display='none';
+  var timer=startLoad('sb-load',null,['Building storyboard…','Writing shot list…','Adding camera notes…']);
+  var msg=`Create a ${n}-shot storyboard for the following project, optimized for ${platform}.\n\nProject: ${desc}\nStyle: ${style}\n\nFor each shot, format EXACTLY as:\nSCENE [n]: [shot title]\nPROMPT: [Detailed visual description and AI video prompt, 2-3 sentences]\nCAMERA: [camera angle and movement]\nLIGHTING: [lighting setup]\nACTION: [what happens in this shot, character action, dialogue cue]\nTAGS: [3-4 tags]\n\nSeparate with ---\nWrite all ${n} shots.`;
+  try{
+    var raw=await callClaude([{role:'user',content:msg}],1000);
+    stopLoad('sb-load',timer);
+    renderScenes(raw,'sb-scenes','sb-cnt','sb-alltext',platform,'none',null);
+    document.getElementById('sb-out').style.display='block';
+    document.getElementById('sb-out').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){stopLoad('sb-load',timer);alert('Error. Please try again.');}
+}
+
+// ── AUTH MODAL ────────────────────────────────────
+function showAuth(tab){
+  document.getElementById('auth-modal').style.display='flex';
+  setAuthTab(tab);
+}
+function setAuthTab(tab){
+  document.getElementById('auth-su').style.display=tab==='signup'?'block':'none';
+  document.getElementById('auth-li').style.display=tab==='login'?'block':'none';
+  document.getElementById('auth-sub').textContent=tab==='signup'?'Create your free account':'Welcome back';
+  document.getElementById('tab-su').style.background=tab==='signup'?'var(--acc)':'transparent';
+  document.getElementById('tab-su').style.color=tab==='signup'?'#fff':'var(--s2)';
+  document.getElementById('tab-li').style.background=tab==='login'?'var(--acc)':'transparent';
+  document.getElementById('tab-li').style.color=tab==='login'?'#fff':'var(--s2)';
+}
+function doAuth(type){
+  var ok=true;
+  if(type==='signup'){
+    if(!document.getElementById('au-name').value.trim()||!document.getElementById('au-email').value.trim()||document.getElementById('au-pass').value.length<8){ok=false;alert('Please fill in all fields (password min 8 chars).');}
+  }else{
+    if(!document.getElementById('li-email').value.trim()||!document.getElementById('li-pass').value.trim()){ok=false;alert('Please fill in all fields.');}
+  }
+  if(!ok)return;
+  document.getElementById('auth-su').style.display='none';
+  document.getElementById('auth-li').style.display='none';
+  document.getElementById('auth-ok').style.display='block';
+  document.getElementById('auth-ok-title').textContent=type==='signup'?'Account created! 🎉':'Welcome back! 👋';
+  setTimeout(()=>document.getElementById('auth-modal').style.display='none',2000);
+}
+</script>
+</body>
+</html>
