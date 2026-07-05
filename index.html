@@ -726,12 +726,16 @@ async function extractFrames(videoEl,n){
 }
 
 // ── API CALL ──────────────────────────────────────
+// Replace this with YOUR Cloudflare Worker URL after you deploy it (see worker.js)
+var PROXY_URL = 'https://tara-proxy.w15358203.workers.dev';
+
 async function callClaude(messages,maxTok=1000){
-  var r=await fetch('https://api.anthropic.com/v1/messages',{
+  var r=await fetch(PROXY_URL,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxTok,messages})
   });
   var d=await r.json();
+  if(d.error){throw new Error(d.error.message||d.error);}
   return d.content.map(b=>b.text||'').join('');
 }
 
