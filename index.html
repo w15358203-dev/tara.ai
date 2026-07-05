@@ -842,7 +842,7 @@ async function analyzeVideo(){
   var voInstr=voStyle==='none'?'No voiceover.':'Include a '+voStyle+' VOICEOVER for each scene.';
   var textBlock={type:'text',text:`Analyze these ${n} video frames (total duration ~${dur}s). Generate ${n} scene prompts optimized for ${platform}.\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY as:\nSCENE [n]: [title]\nTIMECODE: [start–end]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera move]\nLIGHTING: [lighting]\nTAGS: [3-5 tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script 1-2 sentences]\n':''}\nSeparate with ---\nWrite all ${n} scenes.`};
   try{
-    var raw=await callClaude([{role:'user',content:[...imgBlocks,textBlock]}]);
+    var raw=await callClaude([{role:'user',content:[...imgBlocks,textBlock]}], 400+n*350);
     stopLoad('v-load',timer);btn.disabled=false;
     renderScenes(raw,'v-scenes','v-cnt','v-alltext',platform,voStyle,frames);
     document.getElementById('v-out').style.display='block';
@@ -906,7 +906,7 @@ async function generateText(){
   var voInstr=voStyle==='none'?'No voiceover.':'Include a '+voStyle+' VOICEOVER for each scene, 1-2 sentences.';
   var msg=`Generate exactly ${n} scene prompts for this video description, optimized for ${platform}.\n\nDescription: ${desc}\n\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY:\nSCENE [n]: [title]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera movement]\nLIGHTING: [lighting]\nTAGS: [3-5 comma-separated tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script]\n':''}\nSeparate with ---\nWrite all ${n} scenes now.`;
   try{
-    var raw=await callClaude([{role:'user',content:msg}]);
+    var raw=await callClaude([{role:'user',content:msg}], 400+n*350);
     stopLoad('t-load',timer);
     renderScenes(raw,'t-scenes','t-cnt','t-alltext',platform,voStyle,null);
     document.getElementById('t-out').style.display='block';
@@ -947,7 +947,7 @@ async function generateStoryboard(){
   var timer=startLoad('sb-load',null,['Building storyboard…','Writing shot list…','Adding camera notes…']);
   var msg=`Create a ${n}-shot storyboard for the following project, optimized for ${platform}.\n\nProject: ${desc}\nStyle: ${style}\n\nFor each shot, format EXACTLY as:\nSCENE [n]: [shot title]\nPROMPT: [Detailed visual description and AI video prompt, 2-3 sentences]\nCAMERA: [camera angle and movement]\nLIGHTING: [lighting setup]\nACTION: [what happens in this shot, character action, dialogue cue]\nTAGS: [3-4 tags]\n\nSeparate with ---\nWrite all ${n} shots.`;
   try{
-    var raw=await callClaude([{role:'user',content:msg}],1000);
+    var raw=await callClaude([{role:'user',content:msg}],400+n*350);
     stopLoad('sb-load',timer);
     renderScenes(raw,'sb-scenes','sb-cnt','sb-alltext',platform,'none',null);
     document.getElementById('sb-out').style.display='block';
@@ -986,6 +986,3 @@ function doAuth(type){
 </script>
 </body>
 </html>
-
-
-
