@@ -785,9 +785,12 @@ function renderScenes(raw,containerId,cntId,allTextVar,platform,voStyle,frames){
     allText+='\n';
   });
 
-  if(!cnt){html='<div style="text-align:center;padding:1.5rem;color:var(--s3);font-size:13.5px">No scenes parsed. Try a more detailed description.</div>';allText=raw;}
+  if(!cnt){
+    html='<div class="sc"><div class="sc-hd"><span class="sc-num">Result</span><span class="sc-plat">'+platform+'</span></div><div class="sc-body"><div class="lbl">Response</div><div class="prompt-box" style="white-space:pre-wrap">'+raw.replace(/</g,'&lt;')+'</div><button class="cp-sc" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">Copy</button></div></div>';
+    allText=raw;
+  }
   document.getElementById(containerId).innerHTML=html;
-  if(cntId) document.getElementById(cntId).textContent=cnt+' scene'+(cnt!==1?'s':'');
+  if(cntId) document.getElementById(cntId).textContent=cnt?cnt+' scene'+(cnt!==1?'s':''):'1 response';
   window[allTextVar]=allText;
   if(frames) frames.forEach((f,i)=>{
     var c=document.getElementById('sfc-'+(i+1));if(!c)return;
