@@ -312,17 +312,6 @@ canvas{display:none}
         </div>
         <canvas id="vc"></canvas>
         <br>
-        <div class="row2">
-          <div class="f"><label>Visual style</label>
-            <select id="v-sty"><option>Cinematic</option><option>Photorealistic</option><option>Anime</option><option>Documentary</option><option>Vintage film</option><option>Surreal</option><option>3D render</option></select>
-          </div>
-          <div class="f"><label>Mood</label>
-            <select id="v-mod"><option>Epic</option><option>Peaceful</option><option>Mysterious</option><option>Energetic</option><option>Melancholic</option><option>Tense</option><option>Joyful</option></select>
-          </div>
-        </div>
-        <div class="f"><label>Voiceover <span class="opt">(optional)</span></label>
-          <div class="chips" id="v-vo"><div class="chip on" data-v="narrative">Narrative</div><div class="chip" data-v="documentary">Documentary</div><div class="chip" data-v="dramatic">Dramatic</div><div class="chip" data-v="none">None</div></div>
-        </div>
         <div class="f"><label>Extra instructions <span class="opt">(optional)</span></label><input type="text" id="v-ex" placeholder="e.g. focus on lighting, include slow motion notes…"></div>
         <button class="gen-btn" id="v-btn" onclick="analyzeVideo()" disabled>🎬 Analyze video &amp; generate prompts</button>
         <div class="load-row" id="v-load"><div class="spin"></div><span class="load-txt" id="v-ltxt">Extracting frames…</span></div>
@@ -357,14 +346,6 @@ canvas{display:none}
             <div class="chips" id="i-ot"><div class="chip on" data-v="video prompt">Video Prompt</div><div class="chip" data-v="image prompt">Image Prompt</div><div class="chip" data-v="both">Both</div></div>
           </div>
         </div>
-        <div class="row2">
-          <div class="f"><label>Visual style</label>
-            <select id="i-sty"><option>Cinematic</option><option>Photorealistic</option><option>Anime</option><option>Documentary</option><option>Vintage film</option><option>Surreal</option><option>3D render</option></select>
-          </div>
-          <div class="f"><label>Camera movement</label>
-            <select id="i-cam"><option>Slow push-in</option><option>Orbit</option><option>Drone flyover</option><option>Handheld</option><option>Static</option><option>Tracking shot</option></select>
-          </div>
-        </div>
         <div class="f"><label>Extra instructions <span class="opt">(optional)</span></label><input type="text" id="i-ex" placeholder="e.g. add rain, sunset lighting, dramatic score…"></div>
         <button class="gen-btn" id="i-btn" onclick="analyzeImage()" disabled>🖼️ Generate prompt from image</button>
         <div class="load-row" id="i-load"><div class="spin"></div><span class="load-txt" id="i-ltxt">Analyzing image…</span></div>
@@ -385,10 +366,6 @@ canvas{display:none}
       <div class="card-bd">
         <div class="f"><label>Describe your video</label>
           <textarea id="t-desc" rows="4" placeholder="e.g. A travel vlog of Tokyo at night — starting from Shibuya crossing, then ramen stalls, then a quiet shrine, ending with a rooftop city view at golden hour…"></textarea>
-        </div>
-        <div class="row2">
-          <div class="f"><label>Style</label><select id="t-sty"><option>Cinematic</option><option>Photorealistic</option><option>Anime</option><option>Documentary</option><option>Vintage film</option><option>Surreal</option></select></div>
-          <div class="f"><label>Mood</label><select id="t-mod"><option>Epic</option><option>Peaceful</option><option>Mysterious</option><option>Energetic</option><option>Melancholic</option><option>Tense</option></select></div>
         </div>
         <div class="f"><label>Voiceover</label>
           <div class="chips" id="t-vo"><div class="chip on" data-v="narrative">Narrative</div><div class="chip" data-v="documentary">Documentary</div><div class="chip" data-v="dramatic">Dramatic</div><div class="chip" data-v="none">None</div></div>
@@ -459,7 +436,6 @@ canvas{display:none}
         <div class="f"><label>Project description</label>
           <textarea id="sb-desc" rows="4" placeholder="e.g. A 60-second ad for a luxury watch brand. Opens on a mountain summit at dawn, a man checks his watch, looks at the horizon, then cuts to close-ups of the watch mechanism, ending with a brand reveal on white background…"></textarea>
         </div>
-        <div class="f"><label>Style</label><select id="sb-sty"><option>Cinematic live action</option><option>Animated</option><option>Anime</option><option>Documentary</option><option>Commercial</option><option>Music video</option></select></div>
         <button class="gen-btn" onclick="generateStoryboard()">🎞️ Generate storyboard</button>
         <div class="load-row" id="sb-load"><div class="spin"></div><span class="load-txt">Building your storyboard…</span></div>
         <div class="out-wrap" id="sb-out">
@@ -554,8 +530,8 @@ canvas{display:none}
       </div>
       <div class="ft-col">
         <h4>Legal</h4>
-        <a href="#privacy">Privacy Policy</a>
-        <a href="#terms">Terms of Use</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
         <a href="mailto:support@tara.ai">Contact Us</a>
       </div>
     </div>
@@ -591,7 +567,7 @@ canvas{display:none}
       <div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:.4rem" id="auth-ok-title">Account created!</div>
       <div style="font-size:13px;color:var(--s2)">You can now save prompts and access all features.</div>
     </div>
-    <div style="font-size:11.5px;color:var(--s3);text-align:center;margin-top:.85rem">By continuing you agree to our <a href="#terms" style="color:var(--acc2)">Terms</a> and <a href="#privacy" style="color:var(--acc2)">Privacy Policy</a>.</div>
+    <div style="font-size:11.5px;color:var(--s3);text-align:center;margin-top:.85rem">By continuing you agree to our <a href="terms.html" style="color:var(--acc2)">Terms</a> and <a href="privacy.html" style="color:var(--acc2)">Privacy Policy</a>.</div>
   </div>
 </div>
 
@@ -766,24 +742,45 @@ function startLoad(loadId,ltxtId,msgs){
 function stopLoad(loadId,timer){clearInterval(timer);document.getElementById(loadId).style.display='none';}
 
 // ── VIDEO ANALYZER ────────────────────────────────
+async function detectHasAudio(v){
+  try{
+    if(typeof v.mozHasAudio!=='undefined') return v.mozHasAudio;
+    if(typeof v.webkitAudioDecodedByteCount!=='undefined'){
+      var wasPaused=v.paused,startTime=v.currentTime;
+      try{ await v.play(); }catch(e){}
+      await new Promise(r=>setTimeout(r,200));
+      v.pause();
+      v.currentTime=startTime;
+      var has=v.webkitAudioDecodedByteCount>0;
+      if(wasPaused) v.pause();
+      return has;
+    }
+    if(v.audioTracks) return v.audioTracks.length>0;
+  }catch(e){}
+  return null; // couldn't detect (unsupported browser) — let the AI infer from visual cues
+}
+
 async function analyzeVideo(){
   var v=document.getElementById('vmv');
   if(!v||!v.src)return;
   var n=parseInt(gc('v-sc')||'3');
   var platform=gc('v-pl')||'Veo 3';
-  var style=document.getElementById('v-sty').value;
-  var mood=document.getElementById('v-mod').value;
-  var voStyle=gc('v-vo')||'none';
   var extra=document.getElementById('v-ex').value.trim();
   var btn=document.getElementById('v-btn');
   btn.disabled=true;
   document.getElementById('v-out').style.display='none';
-  var timer=startLoad('v-load','v-ltxt',['Extracting frames…','Analyzing scenes…','Writing prompts…','Adding voiceover…']);
+  var timer=startLoad('v-load','v-ltxt',['Extracting frames…','Checking audio…','Analyzing scenes…','Writing prompts…']);
+  var hasAudio=await detectHasAudio(v);
   var frames=await extractFrames(v,n);
   var imgBlocks=frames.map(f=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:f.split(',')[1]}}));
   var dur=Math.round(v.duration);
-  var voInstr=voStyle==='none'?'No voiceover.':'Include a '+voStyle+' VOICEOVER for each scene.';
-  var textBlock={type:'text',text:`Analyze these ${n} video frames (total duration ~${dur}s). Generate ${n} scene prompts for AI video generation.\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY as:\nSCENE [n]: [title]\nTIMECODE: [start–end]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera move]\nLIGHTING: [lighting]\nTAGS: [3-5 tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script 1-2 sentences]\n':''}\nSeparate with ---\nWrite all ${n} scenes.`};
+  var voInstr = hasAudio===true
+    ? 'This video contains audio. Write a VOICEOVER line for each scene that matches the tone, mood and content of that scene, as if narrating it.'
+    : hasAudio===false
+    ? 'This video has NO audio track. Do not invent a voiceover — write exactly "VOICEOVER: None" for each scene.'
+    : 'If the video appears to call for narration based on its visual content, include a fitting VOICEOVER; otherwise write "VOICEOVER: None".';
+  var voStyle = hasAudio===false ? 'none' : 'narrative';
+  var textBlock={type:'text',text:`Analyze these ${n} video frames (total duration ~${dur}s). First identify the video's own visual style (e.g. cinematic, photorealistic, anime, documentary, vintage film, surreal, 3D render, etc.) and mood purely from what you see in the frames — do not assume a style, observe it. Then generate ${n} scene prompts for AI video generation that match and preserve that exact detected style and mood throughout. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY as:\nSCENE [n]: [title]\nTIMECODE: [start–end]\nPROMPT: [2-3 sentence cinematic prompt matching the video's detected style]\nCAMERA: [camera move]\nLIGHTING: [lighting]\nTAGS: [3-5 tags, include the detected style as one tag]\nVOICEOVER: [script matching the scene, or "None" per the instruction above]\n\nSeparate with ---\nWrite all ${n} scenes.`};
   try{
     var raw=await callClaude([{role:'user',content:[...imgBlocks,textBlock]}], 400+n*350);
     stopLoad('v-load',timer);btn.disabled=false;
@@ -799,8 +796,6 @@ async function analyzeImage(){
   if(!img||!img.src)return;
   var platform=gc('i-pl')||'Veo 3';
   var outputType=gc('i-ot')||'video prompt';
-  var style=document.getElementById('i-sty').value;
-  var cam=document.getElementById('i-cam').value;
   var extra=document.getElementById('i-ex').value.trim();
   var btn=document.getElementById('i-btn');
   btn.disabled=true;
@@ -816,14 +811,14 @@ async function analyzeImage(){
       ?'Generate BOTH a video prompt AND an image prompt. Format:\nVIDEO PROMPT: [detailed]\nIMAGE PROMPT: [detailed]\nCAMERA: [move]\nLIGHTING: [lighting]\nTAGS: [5 tags]\nVOICEOVER: [one sentence narration]'
       :outputType==='image prompt'
       ?'Generate an IMAGE PROMPT. Format:\nPROMPT: [detailed image generation prompt]\nTAGS: [5 style tags]\nLIGHTING: [lighting]'
-      :`Generate a VIDEO PROMPT for AI video generation. Format:\nSCENE 1: Visual analysis\nPROMPT: [detailed cinematic video prompt, 3-4 sentences]\nCAMERA: [${cam}]\nLIGHTING: [lighting]\nTAGS: [5 tags]\nVOICEOVER: [one evocative sentence]`;
-    var txt=`Analyze this image and ${promptInstr}\nStyle: ${style}.${extra?' '+extra:''}`;
+      :`Generate a VIDEO PROMPT for AI video generation, choosing the camera move that best fits this image's existing composition. Format:\nSCENE 1: Visual analysis\nPROMPT: [detailed cinematic video prompt, 3-4 sentences]\nCAMERA: [best-fit camera move]\nLIGHTING: [lighting]\nTAGS: [5 tags]\nVOICEOVER: [one evocative sentence]`;
+    var txt=`Analyze this image. First identify its own visual style (e.g. cinematic, photorealistic, anime, documentary, vintage film, surreal, 3D render, etc.) purely from what you see — do not assume a style, observe it. Then ${promptInstr}\nMake sure the output matches and preserves the image's detected style exactly.${extra?' '+extra:''}`;
     try{
       var raw=await callClaude([{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:txt}]}]);
       stopLoad('i-load',timer);btn.disabled=false;
       if(outputType==='image prompt'){
         window['i-alltext']=raw;
-        document.getElementById('i-scenes').innerHTML=`<div class="sc"><div class="sc-hd"><span class="sc-num">Image Prompt</span><span class="sc-plat">Midjourney / DALL-E / Ideogram</span></div><div class="sc-body"><div class="lbl">Prompt</div><div class="prompt-box">${raw.replace(/\n/g,'<br>')}</div><button class="cp-sc" onclick="copyScene(this,1)">Copy prompt</button></div></div>`;
+        document.getElementById('i-scenes').innerHTML=`<div class="sc"><div class="sc-hd"><span class="sc-num">Image Prompt</span></div><div class="sc-body"><div class="lbl">Prompt</div><div class="prompt-box">${raw.replace(/\n/g,'<br>')}</div><button class="cp-sc" onclick="copyScene(this,1)">Copy prompt</button></div></div>`;
       } else {
         renderScenes(raw,'i-scenes',null,'i-alltext',platform,'narrative',null);
       }
@@ -840,14 +835,12 @@ async function generateText(){
   if(!desc){document.getElementById('t-desc').style.borderColor='var(--acc)';setTimeout(()=>document.getElementById('t-desc').style.borderColor='',1500);return;}
   var n=parseInt(gc('t-sc')||'3');
   var platform=gc('t-pl')||'Veo 3';
-  var style=document.getElementById('t-sty').value;
-  var mood=document.getElementById('t-mod').value;
   var voStyle=gc('t-vo')||'none';
   var extra=document.getElementById('t-ex').value.trim();
   document.getElementById('t-out').style.display='none';
   var timer=startLoad('t-load','t-ltxt',['Writing prompts…','Crafting scenes…','Adding voiceover…','Polishing output…']);
   var voInstr=voStyle==='none'?'No voiceover.':'Include a '+voStyle+' VOICEOVER for each scene, 1-2 sentences.';
-  var msg=`Generate exactly ${n} scene prompts for this video description.\n\nDescription: ${desc}\n\nStyle: ${style}. Mood: ${mood}. ${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY:\nSCENE [n]: [title]\nPROMPT: [2-3 sentence cinematic prompt]\nCAMERA: [camera movement]\nLIGHTING: [lighting]\nTAGS: [3-5 comma-separated tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script]\n':''}\nSeparate with ---\nWrite all ${n} scenes now.`;
+  var msg=`Generate exactly ${n} scene prompts for this video description. Infer the visual style and mood entirely from the description's own wording and content — do not impose an unrelated style.\n\nDescription: ${desc}\n\n${extra?'Extra: '+extra+'.':''} ${voInstr}\n\nFormat each scene EXACTLY:\nSCENE [n]: [title]\nPROMPT: [2-3 sentence cinematic prompt matching the description's own style]\nCAMERA: [camera movement]\nLIGHTING: [lighting]\nTAGS: [3-5 comma-separated tags]\n${voStyle!=='none'?'VOICEOVER: ['+voStyle+' script]\n':''}\nSeparate with ---\nWrite all ${n} scenes now.`;
   try{
     var raw=await callClaude([{role:'user',content:msg}], 400+n*350);
     stopLoad('t-load',timer);
@@ -884,11 +877,10 @@ async function generateStoryboard(){
   var desc=document.getElementById('sb-desc').value.trim();
   if(!desc){document.getElementById('sb-desc').style.borderColor='var(--acc)';setTimeout(()=>document.getElementById('sb-desc').style.borderColor='',1500);return;}
   var n=parseInt(gc('sb-sc')||'6');
-  var style=document.getElementById('sb-sty').value;
   var platform=gc('sb-pl')||'Veo 3';
   document.getElementById('sb-out').style.display='none';
   var timer=startLoad('sb-load',null,['Building storyboard…','Writing shot list…','Adding camera notes…']);
-  var msg=`Create a ${n}-shot storyboard for the following project.\n\nProject: ${desc}\nStyle: ${style}\n\nFor each shot, format EXACTLY as:\nSCENE [n]: [shot title]\nPROMPT: [Detailed visual description and AI video prompt, 2-3 sentences]\nCAMERA: [camera angle and movement]\nLIGHTING: [lighting setup]\nACTION: [what happens in this shot, character action, dialogue cue]\nTAGS: [3-4 tags]\n\nSeparate with ---\nWrite all ${n} shots.`;
+  var msg=`Create a ${n}-shot storyboard for the following project. Infer the visual style entirely from the project description's own wording and content — do not impose an unrelated style.\n\nProject: ${desc}\n\nFor each shot, format EXACTLY as:\nSCENE [n]: [shot title]\nPROMPT: [Detailed visual description and AI video prompt matching the project's own style, 2-3 sentences]\nCAMERA: [camera angle and movement]\nLIGHTING: [lighting setup]\nACTION: [what happens in this shot, character action, dialogue cue]\nTAGS: [3-4 tags]\n\nSeparate with ---\nWrite all ${n} shots.`;
   try{
     var raw=await callClaude([{role:'user',content:msg}],400+n*350);
     stopLoad('sb-load',timer);
