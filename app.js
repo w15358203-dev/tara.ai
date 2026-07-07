@@ -389,19 +389,26 @@ function updateAuthUI(){
   }
 }
 
-// Restore session on page load (verifies token is still valid)
-(async function restoreSession(){
+// Show logged-in/out state immediately from localStorage — no waiting on network
+updateAuthUI();
+
+// Quietly verify the session in the background. Only log the user out if the
+// server explicitly says the session is invalid/expired (401) — never on a
+// network hiccup or slow connection, so a new tab doesn't wrongly log you out.
+(async function verifySession(){
   var token=localStorage.getItem('tara_token');
   if(!token)return;
   try{
     var r=await fetch(PROXY_URL+'/auth/me',{headers:{'Authorization':'Bearer '+token}});
-    if(r.ok){
-      var d=await r.json();
-      localStorage.setItem('tara_user',JSON.stringify(d.user));
-    }else{
+    if(r.status===401){
       localStorage.removeItem('tara_token');
       localStorage.removeItem('tara_user');
+      updateAuthUI();
+    }else if(r.ok){
+      var d=await r.json();
+      localStorage.setItem('tara_user',JSON.stringify(d.user));
+      updateAuthUI();
     }
-  }catch(e){}
-  updateAuthUI();
+    // any other response (network issue, server hiccup) — stay logged in, don't touch it
+  }catch(e){ /* network error — stay logged in */ }
 })();
