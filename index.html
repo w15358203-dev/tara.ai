@@ -18,10 +18,6 @@
     <a href="#faq">FAQ</a>
     <a href="#blog">Blog</a>
   </div>
-  <div class="nav-right">
-    <button class="nbtn ghost" onclick="showAuth('login')">Log in</button>
-    <button class="nbtn solid" onclick="showAuth('signup')">Sign up free</button>
-  </div>
 </nav>
 
 <!-- ── HERO ──────────────────────────────────────── -->
@@ -141,7 +137,7 @@
     <div class="hero-eyebrow" style="margin:0 auto 1.25rem">🆓 Free forever plan</div>
     <h2>Start creating AI videos today</h2>
     <p>No credit card. No limits on the free plan. Join thousands of creators already using Tara AI.</p>
-    <button class="hbtn p" onclick="showAuth('signup')">Create free account</button>
+    <a href="#tools"><button class="hbtn p">Start creating now</button></a>
   </div>
 </div>
 
@@ -172,39 +168,6 @@
     <div class="ft-bot"><span>© 2025 Tara AI. All rights reserved.</span><span>Made with ❤️ for creators</span></div>
   </div>
 </footer>
-
-
-<!-- ── AUTH MODAL ─────────────────────────────────── -->
-<div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem" onclick="if(event.target===this)this.style.display='none'">
-  <div style="background:var(--bg2);border:1px solid var(--bd2);border-radius:var(--r3);padding:2rem;width:100%;max-width:420px;position:relative">
-    <button onclick="document.getElementById('auth-modal').style.display='none'" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--s3);font-size:18px;cursor:pointer">✕</button>
-    <div style="text-align:center;margin-bottom:1.5rem">
-      <div style="font-family:var(--display);font-weight:800;font-size:1.3rem;color:#fff;margin-bottom:3px">Tara AI</div>
-      <div id="auth-sub" style="font-size:13px;color:var(--s3)">Create your free account</div>
-    </div>
-    <div style="display:flex;background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:3px;gap:3px;margin-bottom:1.25rem">
-      <button id="tab-su" onclick="setAuthTab('signup')" style="flex:1;padding:8px;border-radius:8px;border:none;font-size:13.5px;font-weight:500;background:var(--acc);color:#fff;cursor:pointer">Sign up</button>
-      <button id="tab-li" onclick="setAuthTab('login')" style="flex:1;padding:8px;border-radius:8px;border:none;font-size:13.5px;font-weight:500;background:transparent;color:var(--s2);cursor:pointer">Log in</button>
-    </div>
-    <div id="auth-su">
-      <div class="f"><label>Name</label><input type="text" id="au-name" placeholder="Your name"></div>
-      <div class="f"><label>Email</label><input type="email" id="au-email" placeholder="you@example.com"></div>
-      <div class="f"><label>Password</label><input type="password" id="au-pass" placeholder="At least 8 characters"></div>
-      <button class="gen-btn" onclick="doAuth('signup',this)">Create free account</button>
-    </div>
-    <div id="auth-li" style="display:none">
-      <div class="f"><label>Email</label><input type="email" id="li-email" placeholder="you@example.com"></div>
-      <div class="f"><label>Password</label><input type="password" id="li-pass" placeholder="Your password"></div>
-      <button class="gen-btn" onclick="doAuth('login',this)">Log in</button>
-    </div>
-    <div id="auth-ok" style="display:none;text-align:center;padding:1.5rem 0">
-      <div style="font-size:2.5rem;margin-bottom:.75rem">🎉</div>
-      <div style="font-size:16px;font-weight:600;color:#fff;margin-bottom:.4rem" id="auth-ok-title">Account created!</div>
-      <div style="font-size:13px;color:var(--s2)">You can now save prompts and access all features.</div>
-    </div>
-    <div style="font-size:11.5px;color:var(--s3);text-align:center;margin-top:.85rem">By continuing you agree to our <a href="terms.html" style="color:var(--acc2)">Terms</a> and <a href="privacy.html" style="color:var(--acc2)">Privacy Policy</a>.</div>
-  </div>
-</div>
 
 
 <script src="app.js"></script>
